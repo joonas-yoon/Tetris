@@ -112,6 +112,8 @@ public class Board extends JPanel implements ActionListener {
 						curPiece.getShape());
 			}
 		}
+		
+		preview(g);
 	}
 
 	private void dropDown() {
@@ -181,6 +183,29 @@ public class Board extends JPanel implements ActionListener {
 			return true;
 		}
 		return false;
+	}
+	
+	private int getYPosPredict(Shape newPiece, int startX, int startY) {
+		Shape piece = newPiece;
+		int newY = startY;
+		while(isMovableDownward(piece, startX, newY - 1)) {
+			newY -= 1;
+		}
+		return newY;
+	}
+	
+	private void preview(Graphics g) {
+		if(!isStarted || isPaused || isFallingFinished) return;
+
+		Dimension size = getSize();
+		int boardTop = (int) size.getHeight() - BoardHeight * squareHeight();
+		int bottomPredict = getYPosPredict(curPiece, curX, curY);
+		
+		for (int i = 0; i < 4; ++i) {
+			int x = curX + curPiece.x(i);
+			int y = bottomPredict - curPiece.y(i);
+			drawSquare(g, x * squareWidth(), boardTop + (BoardHeight - y - 1) * squareHeight(), curPiece.getShape());
+		}
 	}
 
 	private void removeFullLines() {
