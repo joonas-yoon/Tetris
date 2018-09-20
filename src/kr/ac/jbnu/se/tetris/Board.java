@@ -117,7 +117,7 @@ public class Board extends JPanel implements ActionListener {
 	private void dropDown() {
 		int newY = curY;
 		while (newY > 0) {
-			if (!tryMove(curPiece, curX, newY - 1))
+			if (!tryMoveOrFail(curPiece, curX, newY - 1))
 				break;
 			--newY;
 		}
@@ -125,7 +125,7 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	private void oneLineDown() {
-		if (!tryMove(curPiece, curX, curY - 1))
+		if (!tryMoveOrFail(curPiece, curX, curY - 1))
 			pieceDropped();
 	}
 
@@ -152,7 +152,7 @@ public class Board extends JPanel implements ActionListener {
 		curX = BoardWidth / 2 + 1;
 		curY = BoardHeight - 1 + curPiece.minY();
 
-		if (!tryMove(curPiece, curX, curY)) {
+		if (!tryMoveOrFail(curPiece, curX, curY)) {
 			curPiece.setShape(Tetrominoes.NoShape);
 			timer.stop();
 			isStarted = false;
@@ -160,7 +160,7 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
-	private boolean tryMove(Shape newPiece, int newX, int newY) {
+	private boolean isMovableDownward(Shape newPiece, int newX, int newY) {
 		for (int i = 0; i < 4; ++i) {
 			int x = newX + newPiece.x(i);
 			int y = newY - newPiece.y(i);
@@ -169,12 +169,18 @@ public class Board extends JPanel implements ActionListener {
 			if (shapeAt(x, y) != Tetrominoes.NoShape)
 				return false;
 		}
-
-		curPiece = newPiece;
-		curX = newX;
-		curY = newY;
-		repaint();
 		return true;
+	}
+	
+	private boolean tryMoveOrFail(Shape newPiece, int newX, int newY) {
+		if(isMovableDownward(newPiece, newX, newY)) {
+			curPiece = newPiece;
+			curX = newX;
+			curY = newY;
+			repaint();
+			return true;
+		}
+		return false;
 	}
 
 	private void removeFullLines() {
@@ -246,16 +252,16 @@ public class Board extends JPanel implements ActionListener {
 
 			switch (keycode) {
 			case KeyEvent.VK_LEFT:
-				tryMove(curPiece, curX - 1, curY);
+				tryMoveOrFail(curPiece, curX - 1, curY);
 				break;
 			case KeyEvent.VK_RIGHT:
-				tryMove(curPiece, curX + 1, curY);
+				tryMoveOrFail(curPiece, curX + 1, curY);
 				break;
 			case KeyEvent.VK_DOWN:
-				tryMove(curPiece.rotateRight(), curX, curY);
+				tryMoveOrFail(curPiece.rotateRight(), curX, curY);
 				break;
 			case KeyEvent.VK_UP:
-				tryMove(curPiece.rotateLeft(), curX, curY);
+				tryMoveOrFail(curPiece.rotateLeft(), curX, curY);
 				break;
 			case KeyEvent.VK_SPACE:
 				dropDown();
