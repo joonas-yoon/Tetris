@@ -8,11 +8,11 @@ import javax.sound.sampled.Clip;
 
 public class SoundPlayer {
 	private Clip clip;
-	
+
 	public SoundPlayer() {
-		
+
 	}
-	
+
 	public void play(String filename, int loopCount) {
 		try {
 			AudioInputStream ais = AudioSystem.getAudioInputStream(new File(filename));
@@ -26,7 +26,7 @@ public class SoundPlayer {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void stop() {
 		try {
 			clip.stop();

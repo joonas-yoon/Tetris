@@ -51,7 +51,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			oneLineDown();
 		}
 	}
-	
+
 	Tetrominoes shapeAt(int x, int y) {
 		return board[(y * BoardWidth) + x];
 	}
@@ -198,9 +198,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		}
 		return true;
 	}
-	
+
 	private boolean tryMoveOrFail(Shape newPiece, int newX, int newY) {
-		if(isMovableDownward(newPiece, newX, newY)) {
+		if (isMovableDownward(newPiece, newX, newY)) {
 			curPiece = newPiece;
 			curX = newX;
 			curY = newY;
@@ -209,18 +209,19 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		}
 		return false;
 	}
-	
+
 	private int getYPosPredict(Shape newPiece, int startX, int startY) {
 		Shape piece = newPiece;
 		int newY = startY;
-		while(isMovableDownward(piece, startX, newY - 1)) {
+		while (isMovableDownward(piece, startX, newY - 1)) {
 			newY -= 1;
 		}
 		return newY;
 	}
-	
+
 	private void preview(Graphics g) {
-		if(!isStarted || isPaused || isFallingFinished) return;
+		if (!isStarted || isPaused || isFallingFinished)
+			return;
 
 		int bottomPredict = getYPosPredict(curPiece, curX, curY);
 		drawShape(g, curX, bottomPredict, curPiece, true);
@@ -265,7 +266,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			int keycode = e.getKeyCode();
 
 			if (!isStarted || curPiece.getShape() == Tetrominoes.NoShape) {
-				if(keycode == KeyEvent.VK_ENTER) {
+				if (keycode == KeyEvent.VK_ENTER) {
 					start();
 				}
 				return;

@@ -5,14 +5,14 @@ import java.awt.Graphics;
 
 public class UIPane extends TetrisGridPanel {
 	Board board;
-	
+
 	private BlockFactory nextBlocks;
-	
+
 	public UIPane(Board parent) {
 		board = parent;
-		
+
 		nextBlocks = board.nextBlocks;
-		
+
 		setSize(12, 8);
 	}
 
@@ -27,8 +27,8 @@ public class UIPane extends TetrisGridPanel {
 				drawRect(g, x, y, new Color(254, 254, 254, 50));
 			}
 		}
-		
-		for(int nth = 0; nth < 2; ++nth) {
+
+		for (int nth = 0; nth < 2; ++nth) {
 			Shape nextBlock = nextBlocks.getBlock(nth);
 
 			if (nextBlock != null && nextBlock.getShape() != Tetrominoes.NoShape) {

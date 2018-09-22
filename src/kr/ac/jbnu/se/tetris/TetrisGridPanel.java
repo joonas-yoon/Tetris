@@ -10,7 +10,7 @@ public class TetrisGridPanel extends JPanel {
 
 	int BoardWidth = 12;
 	int BoardHeight = 23;
-	
+
 	public void setSize(int width, int height) {
 		BoardWidth = width;
 		BoardHeight = height;
@@ -27,7 +27,7 @@ public class TetrisGridPanel extends JPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 	}
-	
+
 	void drawRect(Graphics g, int x, int y, Color color) {
 		g.setColor(color);
 		g.fillRect(x + 1, y + 1, squareWidth() - 2, squareHeight() - 2);
@@ -53,7 +53,7 @@ public class TetrisGridPanel extends JPanel {
 		}
 		drawRect(g, x, y, color);
 	}
-	
+
 	void drawShape(Graphics g, int x, int y, Shape piece, boolean translucent) {
 		Dimension size = getSize();
 		int boardTop = (int) size.getHeight() - BoardHeight * squareHeight();
@@ -61,7 +61,8 @@ public class TetrisGridPanel extends JPanel {
 		for (int i = 0; i < 4; ++i) {
 			int rx = x + piece.x(i);
 			int ry = y - piece.y(i);
-			drawRect(g, rx * squareWidth(), boardTop + (BoardHeight - ry - 1) * squareHeight(), piece.getShape(), translucent);
+			drawRect(g, rx * squareWidth(), boardTop + (BoardHeight - ry - 1) * squareHeight(), piece.getShape(),
+					translucent);
 		}
 	}
 }
