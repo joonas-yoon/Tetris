@@ -1,6 +1,7 @@
 package kr.ac.jbnu.se.tetris;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -8,6 +9,9 @@ public class Tetris extends JFrame {
 
 	JLabel statusbar;
 	BGM bgm = BGM.getInstance();
+	
+	int VIEWPORT_WIDTH = 640;
+	int VIEWPORT_HEIGHT = 480;
 
 	public Tetris() {
 
@@ -15,9 +19,10 @@ public class Tetris extends JFrame {
 		add(statusbar, BorderLayout.SOUTH);
 		Board board = new Board(this);
 		add(board);
+		board.setBackground(Color.WHITE);
 		board.start();
 
-		setSize(200, 400);
+		setSize(VIEWPORT_WIDTH * 2 / 3, VIEWPORT_HEIGHT);
 		setTitle("Tetris");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
