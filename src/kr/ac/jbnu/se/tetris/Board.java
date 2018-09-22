@@ -12,10 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class Board extends JPanel implements ActionListener {
-
-	final int BoardWidth = 13;
-	final int BoardHeight = 22;
+public class Board extends TetrisGridPanel implements ActionListener {
 
 	Timer timer;
 	boolean isFallingFinished = false;
@@ -34,7 +31,6 @@ public class Board extends JPanel implements ActionListener {
 	BGM bgm = BGM.getInstance();
 
 	public Board(Tetris parent) {
-
 		setFocusable(true);
 		curPiece = new Shape();
 		timer = new Timer(400, this);
@@ -54,19 +50,11 @@ public class Board extends JPanel implements ActionListener {
 			oneLineDown();
 		}
 	}
-
-	int squareWidth() {
-		return (int) getSize().getWidth() / BoardWidth;
-	}
-
-	int squareHeight() {
-		return (int) getSize().getHeight() / BoardHeight;
-	}
-
+	
 	Tetrominoes shapeAt(int x, int y) {
 		return board[(y * BoardWidth) + x];
 	}
-	
+
 	private void init() {
 		isFallingFinished = false;
 		isStarted = false;
@@ -75,7 +63,7 @@ public class Board extends JPanel implements ActionListener {
 		curX = 0;
 		curY = 0;
 	}
-	
+
 	private void refreshText() {
 		System.out.println(isPaused);
 		if (isPaused)
@@ -89,7 +77,7 @@ public class Board extends JPanel implements ActionListener {
 	public void start() {
 		if (isPaused)
 			return;
-		
+
 		init();
 
 		isStarted = true;
@@ -100,7 +88,7 @@ public class Board extends JPanel implements ActionListener {
 
 		newPiece();
 		timer.start();
-		if(!bgm.isPlaying)
+		if (!bgm.isPlaying)
 			bgm.play();
 	}
 
@@ -114,11 +102,11 @@ public class Board extends JPanel implements ActionListener {
 		} else {
 			timer.start();
 		}
-		
+
 		refreshText();
 		repaint();
 	}
-	
+
 	private void gameover() {
 		curPiece.setShape(Tetrominoes.NoShape);
 		timer.stop();
@@ -186,7 +174,7 @@ public class Board extends JPanel implements ActionListener {
 		}
 
 		removeFullLines();
-		
+
 		sound.play("sounds/beep0.wav", 1);
 
 		if (!isFallingFinished)
@@ -279,32 +267,6 @@ public class Board extends JPanel implements ActionListener {
 
 			sound.play("sounds/beep1.wav", 1);
 		}
-	}
-	
-	private void drawRect(Graphics g, int x, int y, Color color) {
-		g.setColor(color);
-		g.fillRect(x + 1, y + 1, squareWidth() - 2, squareHeight() - 2);
-
-		g.setColor(color.brighter());
-		g.drawLine(x, y + squareHeight() - 1, x, y);
-		g.drawLine(x, y, x + squareWidth() - 1, y);
-
-		g.setColor(color.darker());
-		g.drawLine(x + 1, y + squareHeight() - 1, x + squareWidth() - 1, y + squareHeight() - 1);
-		g.drawLine(x + squareWidth() - 1, y + squareHeight() - 1, x + squareWidth() - 1, y + 1);
-	}
-
-	private void drawSquare(Graphics g, int x, int y, Tetrominoes shape, boolean translucent) {
-		Color colors[] = { new Color(0, 0, 0), new Color(204, 102, 102), new Color(102, 204, 102),
-				new Color(102, 102, 204), new Color(204, 204, 102), new Color(204, 102, 204), new Color(102, 204, 204),
-				new Color(218, 170, 0) };
-
-		Color color = colors[shape.ordinal()];
-		if(translucent) {
-			Color newColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha() / 2);
-			color = newColor;
-		}
-		drawRect(g, x,  y, color);
 	}
 
 	class TAdapter extends KeyAdapter {
