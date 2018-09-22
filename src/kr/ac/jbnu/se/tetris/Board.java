@@ -64,15 +64,37 @@ public class Board extends JPanel implements ActionListener {
 	Tetrominoes shapeAt(int x, int y) {
 		return board[(y * BoardWidth) + x];
 	}
+	
+	private void init() {
+		isFallingFinished = false;
+		isStarted = false;
+		isPaused = false;
+		numLinesRemoved = 0;
+		curX = 0;
+		curY = 0;
+	}
+	
+	private void refreshText() {
+		System.out.println(isPaused);
+		if (isPaused)
+			statusbar.setText("paused");
+		else if (isStarted)
+			statusbar.setText(String.valueOf(numLinesRemoved));
+		else
+			statusbar.setText("game over");
+	}
 
 	public void start() {
 		if (isPaused)
 			return;
+		
+		init();
 
 		isStarted = true;
 		isFallingFinished = false;
 		numLinesRemoved = 0;
 		clearBoard();
+		refreshText();
 
 		newPiece();
 		timer.start();
@@ -87,12 +109,21 @@ public class Board extends JPanel implements ActionListener {
 		isPaused = !isPaused;
 		if (isPaused) {
 			timer.stop();
-			statusbar.setText("paused");
 		} else {
 			timer.start();
-			statusbar.setText(String.valueOf(numLinesRemoved));
 		}
+		
+		refreshText();
 		repaint();
+	}
+	
+	private void gameover() {
+		curPiece.setShape(Tetrominoes.NoShape);
+		timer.stop();
+		isStarted = false;
+		refreshText();
+		bgm.stop();
+		sound.play("sounds/gameover.wav", 0);
 	}
 
 	public void paint(Graphics g) {
@@ -161,14 +192,8 @@ public class Board extends JPanel implements ActionListener {
 		curX = BoardWidth / 2 + 1;
 		curY = BoardHeight - 1 + curPiece.minY();
 
-		if (!tryMoveOrFail(curPiece, curX, curY)) {
-			curPiece.setShape(Tetrominoes.NoShape);
-			timer.stop();
-			isStarted = false;
-			statusbar.setText("game over");
-			bgm.stop();
-			sound.play("sounds/gameover.wav", 0);
-		}
+		if (!tryMoveOrFail(curPiece, curX, curY))
+			gameover();
 	}
 
 	private boolean isMovableDownward(Shape newPiece, int newX, int newY) {
@@ -241,7 +266,7 @@ public class Board extends JPanel implements ActionListener {
 
 		if (numFullLines > 0) {
 			numLinesRemoved += numFullLines;
-			statusbar.setText(String.valueOf(numLinesRemoved));
+			refreshText();
 			isFallingFinished = true;
 			curPiece.setShape(Tetrominoes.NoShape);
 			repaint();
@@ -276,11 +301,14 @@ public class Board extends JPanel implements ActionListener {
 	class TAdapter extends KeyAdapter {
 		public void keyPressed(KeyEvent e) {
 
+			int keycode = e.getKeyCode();
+
 			if (!isStarted || curPiece.getShape() == Tetrominoes.NoShape) {
+				if(keycode == KeyEvent.VK_ENTER) {
+					start();
+				}
 				return;
 			}
-
-			int keycode = e.getKeyCode();
 
 			if (keycode == 'p' || keycode == 'P') {
 				pause();
