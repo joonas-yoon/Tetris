@@ -17,9 +17,13 @@ public class BlockFactory {
 		return shape;
 	}
 	
+	public Shape getBlock(int idx) {
+		if(queue.isEmpty() || idx < 0 || idx >= queue.size()) return null;
+		return queue.get(idx);
+	}
+	
 	public Shape getNextBlock() {
-		if(queue.isEmpty()) return null;
-		return queue.get(0);
+		return getBlock(0);
 	}
 	
 	public void pop() {

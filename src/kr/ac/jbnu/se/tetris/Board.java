@@ -9,7 +9,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class Board extends TetrisGridPanel implements ActionListener {
@@ -24,8 +23,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	JLabel statusbar;
 	Shape curPiece;
 	Tetrominoes[] board;
-	
-	BlockFactory nextBlocks = new BlockFactory(5);
+
+	UIPane uipane;
+	public BlockFactory nextBlocks = new BlockFactory(5);
 
 	SoundPlayer sound = new SoundPlayer();
 	BGM bgm = BGM.getInstance();
@@ -37,6 +37,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		timer.start();
 
 		statusbar = parent.getStatusBar();
+		uipane = parent.getUIPane();
 		board = new Tetrominoes[BoardWidth * BoardHeight];
 		addKeyListener(new TAdapter());
 		clearBoard();
@@ -177,7 +178,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	}
 
 	private void newPiece() {
-		curPiece = nextBlocks.createBlock();
+		curPiece = nextBlocks.getNextBlock();
+		nextBlocks.pop();
 		curX = BoardWidth / 2 + 1;
 		curY = BoardHeight - 1 + curPiece.minY();
 
