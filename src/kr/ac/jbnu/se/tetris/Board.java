@@ -28,6 +28,8 @@ public class Board extends JPanel implements ActionListener {
 	Shape curPiece;
 	Tetrominoes[] board;
 
+	SoundPlayer sound = SoundPlayer.getInstance();
+
 	public Board(Tetris parent) {
 
 		setFocusable(true);
@@ -144,6 +146,8 @@ public class Board extends JPanel implements ActionListener {
 		}
 
 		removeFullLines();
+		
+		sound.play("sounds/beep0.wav", 1);
 
 		if (!isFallingFinished)
 			newPiece();
@@ -236,6 +240,8 @@ public class Board extends JPanel implements ActionListener {
 			isFallingFinished = true;
 			curPiece.setShape(Tetrominoes.NoShape);
 			repaint();
+
+			sound.play("sounds/beep1.wav", 1);
 		}
 	}
 
