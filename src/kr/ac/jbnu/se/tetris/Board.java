@@ -28,7 +28,8 @@ public class Board extends JPanel implements ActionListener {
 	Shape curPiece;
 	Tetrominoes[] board;
 
-	SoundPlayer sound = SoundPlayer.getInstance();
+	SoundPlayer sound = new SoundPlayer();
+	BGM bgm = BGM.getInstance();
 
 	public Board(Tetris parent) {
 
@@ -75,6 +76,8 @@ public class Board extends JPanel implements ActionListener {
 
 		newPiece();
 		timer.start();
+		if(!bgm.isPlaying)
+			bgm.play();
 	}
 
 	private void pause() {
@@ -163,6 +166,8 @@ public class Board extends JPanel implements ActionListener {
 			timer.stop();
 			isStarted = false;
 			statusbar.setText("game over");
+			bgm.stop();
+			sound.play("sounds/gameover.wav", 0);
 		}
 	}
 
@@ -306,6 +311,12 @@ public class Board extends JPanel implements ActionListener {
 				break;
 			case 'D':
 				oneLineDown();
+				break;
+			case KeyEvent.VK_1:
+				bgm.changePrev();
+				break;
+			case KeyEvent.VK_2:
+				bgm.changeNext();
 				break;
 			}
 
