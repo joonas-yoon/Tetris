@@ -14,7 +14,7 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
 
-	final int BoardWidth = 10;
+	final int BoardWidth = 13;
 	final int BoardHeight = 22;
 
 	Timer timer;
@@ -135,8 +135,12 @@ public class Board extends JPanel implements ActionListener {
 		for (int i = 0; i < BoardHeight; ++i) {
 			for (int j = 0; j < BoardWidth; ++j) {
 				Tetrominoes shape = shapeAt(j, BoardHeight - i - 1);
+				int x = j * squareWidth();
+				int y = boardTop + i * squareHeight();
 				if (shape != Tetrominoes.NoShape)
-					drawSquare(g, 0 + j * squareWidth(), boardTop + i * squareHeight(), shape, false);
+					drawSquare(g, x, y, shape, false);
+				else
+					drawRect(g, x, y, new Color(254, 254, 254, 50));
 			}
 		}
 
@@ -274,6 +278,19 @@ public class Board extends JPanel implements ActionListener {
 			sound.play("sounds/beep1.wav", 1);
 		}
 	}
+	
+	private void drawRect(Graphics g, int x, int y, Color color) {
+		g.setColor(color);
+		g.fillRect(x + 1, y + 1, squareWidth() - 2, squareHeight() - 2);
+
+		g.setColor(color.brighter());
+		g.drawLine(x, y + squareHeight() - 1, x, y);
+		g.drawLine(x, y, x + squareWidth() - 1, y);
+
+		g.setColor(color.darker());
+		g.drawLine(x + 1, y + squareHeight() - 1, x + squareWidth() - 1, y + squareHeight() - 1);
+		g.drawLine(x + squareWidth() - 1, y + squareHeight() - 1, x + squareWidth() - 1, y + 1);
+	}
 
 	private void drawSquare(Graphics g, int x, int y, Tetrominoes shape, boolean translucent) {
 		Color colors[] = { new Color(0, 0, 0), new Color(204, 102, 102), new Color(102, 204, 102),
@@ -285,17 +302,7 @@ public class Board extends JPanel implements ActionListener {
 			Color newColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha() / 2);
 			color = newColor;
 		}
-
-		g.setColor(color);
-		g.fillRect(x + 1, y + 1, squareWidth() - 2, squareHeight() - 2);
-
-		g.setColor(color.brighter());
-		g.drawLine(x, y + squareHeight() - 1, x, y);
-		g.drawLine(x, y, x + squareWidth() - 1, y);
-
-		g.setColor(color.darker());
-		g.drawLine(x + 1, y + squareHeight() - 1, x + squareWidth() - 1, y + squareHeight() - 1);
-		g.drawLine(x + squareWidth() - 1, y + squareHeight() - 1, x + squareWidth() - 1, y + 1);
+		drawRect(g, x,  y, color);
 	}
 
 	class TAdapter extends KeyAdapter {
