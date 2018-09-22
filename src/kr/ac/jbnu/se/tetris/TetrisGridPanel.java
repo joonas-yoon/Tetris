@@ -1,6 +1,7 @@
 package kr.ac.jbnu.se.tetris;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
@@ -40,7 +41,7 @@ public class TetrisGridPanel extends JPanel {
 		g.drawLine(x + squareWidth() - 1, y + squareHeight() - 1, x + squareWidth() - 1, y + 1);
 	}
 
-	void drawSquare(Graphics g, int x, int y, Tetrominoes shape, boolean translucent) {
+	void drawRect(Graphics g, int x, int y, Tetrominoes shape, boolean translucent) {
 		Color colors[] = { new Color(0, 0, 0), new Color(204, 102, 102), new Color(102, 204, 102),
 				new Color(102, 102, 204), new Color(204, 204, 102), new Color(204, 102, 204), new Color(102, 204, 204),
 				new Color(218, 170, 0) };
@@ -51,5 +52,16 @@ public class TetrisGridPanel extends JPanel {
 			color = newColor;
 		}
 		drawRect(g, x, y, color);
+	}
+	
+	void drawShape(Graphics g, int x, int y, Shape piece, boolean translucent) {
+		Dimension size = getSize();
+		int boardTop = (int) size.getHeight() - BoardHeight * squareHeight();
+
+		for (int i = 0; i < 4; ++i) {
+			int rx = x + piece.x(i);
+			int ry = y - piece.y(i);
+			drawRect(g, rx * squareWidth(), boardTop + (BoardHeight - ry - 1) * squareHeight(), piece.getShape(), translucent);
+		}
 	}
 }

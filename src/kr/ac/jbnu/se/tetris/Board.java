@@ -128,21 +128,16 @@ public class Board extends TetrisGridPanel implements ActionListener {
 				int x = j * squareWidth();
 				int y = boardTop + i * squareHeight();
 				if (shape != Tetrominoes.NoShape)
-					drawSquare(g, x, y, shape, false);
+					drawRect(g, x, y, shape, false);
 				else
 					drawRect(g, x, y, new Color(254, 254, 254, 50));
 			}
 		}
 
 		if (curPiece.getShape() != Tetrominoes.NoShape) {
-			for (int i = 0; i < 4; ++i) {
-				int x = curX + curPiece.x(i);
-				int y = curY - curPiece.y(i);
-				drawSquare(g, 0 + x * squareWidth(), boardTop + (BoardHeight - y - 1) * squareHeight(),
-						curPiece.getShape(), false);
-			}
+			drawShape(g, curX, curY, curPiece, false);
 		}
-		
+
 		preview(g);
 	}
 
@@ -225,15 +220,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	private void preview(Graphics g) {
 		if(!isStarted || isPaused || isFallingFinished) return;
 
-		Dimension size = getSize();
-		int boardTop = (int) size.getHeight() - BoardHeight * squareHeight();
 		int bottomPredict = getYPosPredict(curPiece, curX, curY);
-		
-		for (int i = 0; i < 4; ++i) {
-			int x = curX + curPiece.x(i);
-			int y = bottomPredict - curPiece.y(i);
-			drawSquare(g, x * squareWidth(), boardTop + (BoardHeight - y - 1) * squareHeight(), curPiece.getShape(), true);
-		}
+		drawShape(g, curX, bottomPredict, curPiece, true);
 	}
 
 	private void removeFullLines() {
