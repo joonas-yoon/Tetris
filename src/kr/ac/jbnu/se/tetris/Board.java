@@ -27,6 +27,8 @@ public class Board extends JPanel implements ActionListener {
 	JLabel statusbar;
 	Shape curPiece;
 	Tetrominoes[] board;
+	
+	BlockFactory nextBlocks = new BlockFactory(5);
 
 	SoundPlayer sound = new SoundPlayer();
 	BGM bgm = BGM.getInstance();
@@ -192,7 +194,7 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	private void newPiece() {
-		curPiece.setRandomShape();
+		curPiece = nextBlocks.createBlock();
 		curX = BoardWidth / 2 + 1;
 		curY = BoardHeight - 1 + curPiece.minY();
 
