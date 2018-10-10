@@ -1,13 +1,12 @@
 package kr.ac.jbnu.se.tetris;
 
 import java.io.File;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 public class SoundPlayer {
-	private Clip clip;
+	private Clip clip = null;
 
 	public boolean isPlaying = false;
 
@@ -32,18 +31,39 @@ public class SoundPlayer {
 	}
 
 	public void pause() {
-		if (clip.isOpen())
-			clip.stop();
-		isPlaying = false;
+		if (clip == null)
+			return;
+
+		try {
+			if (clip.isOpen())
+				clip.stop();
+		} catch (Exception ex) {
+			// TODO Auto-generated catch block
+			ex.printStackTrace();
+		} finally {
+			isPlaying = false;
+		}
 	}
 
 	public void resume() {
-		if (clip.isOpen())
-			clip.start();
-		isPlaying = true;
+		if (clip == null)
+			return;
+
+		try {
+			if (clip.isOpen())
+				clip.start();
+		} catch (Exception ex) {
+			// TODO Auto-generated catch block
+			ex.printStackTrace();
+		} finally {
+			isPlaying = true;
+		}
 	}
 
 	public void stop() {
+		if (clip == null)
+			return;
+
 		try {
 			clip.stop();
 			clip.close();
