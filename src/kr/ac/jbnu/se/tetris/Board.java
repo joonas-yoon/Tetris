@@ -33,6 +33,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	BGM bgm = BGM.getInstance();
 
 	Color comboFontColor = Color.BLACK;
+	int comboOpacity = 100;
 	int comboCount = 0;
 
 	public Board(Tetris parent) {
@@ -46,6 +47,16 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		board = new Tetrominoes[BoardWidth * BoardHeight];
 		addKeyListener(new TAdapter());
 		clearBoard();
+
+		new java.util.Timer().schedule(new java.util.TimerTask() {
+			@Override
+			public void run() {
+				if (comboOpacity - 5 >= 0) {
+					comboOpacity -= 5;
+					repaint();
+				}
+			}
+		}, 100, 100);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -89,7 +100,11 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			int x = ((getWidth() - fm.stringWidth(text)) / 2);
 			int y = ((getHeight() - fm.getHeight()) / 2) + fm.getAscent();
 
-			g2d.setColor(comboFontColor);
+			Color newColor = new Color(comboFontColor.getRed(), comboFontColor.getGreen(), comboFontColor.getBlue(),
+					comboOpacity * 255 / 100);
+			g2d.setColor(newColor);
+
+			y += comboOpacity / 5;
 			g2d.drawString(text, x, y);
 
 			g2d.dispose();
@@ -98,10 +113,11 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 	private void processCombo(Graphics g) {
 		// 0 for Test, 1 for production
-		if(comboCount > 0){
+		if (comboCount > 0) {
 			showComboMessage(g, comboCount + " Combo!");
 		} else {
-			showComboMessage(g, "");
+			comboOpacity = 100;
+			showComboMessage(g, "XX");
 		}
 	}
 
@@ -286,13 +302,13 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			refreshText();
 			isFallingFinished = true;
 			curPiece.setShape(Tetrominoes.NoShape);
-			repaint();
-
-			sound.play("sounds/beep1.wav", 1);
 
 			comboCount += 1;
-		}
-		else {
+			comboOpacity = 100;
+
+			repaint();
+			sound.play("sounds/beep1.wav", 1);
+		} else {
 			comboCount = 0;
 		}
 	}
