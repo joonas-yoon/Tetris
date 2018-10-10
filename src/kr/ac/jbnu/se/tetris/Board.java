@@ -15,7 +15,7 @@ import javax.swing.Timer;
 
 public class Board extends TetrisGridPanel implements ActionListener {
 
-	Timer timer;
+	Timer gameTimer;
 	boolean isFallingFinished = false;
 	boolean isStarted = false;
 	boolean isPaused = false;
@@ -36,11 +36,16 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	int comboOpacity = 100;
 	int comboCount = 0;
 
+	int gameSpeedLevel = 1;
+	int[] gameSpeedDelay = { 400, 300, 200, 150, 100, 75, 50 };
+	
+	long score = 0;
+
 	public Board(Tetris parent) {
 		setFocusable(true);
 		curPiece = new Shape();
-		timer = new Timer(400, this);
-		timer.start();
+		gameTimer = new Timer(getGameSpeed(), this);
+		gameTimer.start();
 
 		statusbar = parent.getStatusBar();
 		uipane = parent.getUIPane();
@@ -48,15 +53,32 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		addKeyListener(new TAdapter());
 		clearBoard();
 
+		long observeDelay = 100;
+		long observePeriod = 100;
 		new java.util.Timer().schedule(new java.util.TimerTask() {
 			@Override
 			public void run() {
-				if (comboOpacity - 5 >= 0) {
-					comboOpacity -= 5;
-					repaint();
-				}
+				observe();
 			}
-		}, 100, 100);
+		}, observeDelay, observePeriod);
+	}
+	
+	private void observe(){
+		if (comboOpacity - 5 >= 0) {
+			comboOpacity -= 5;
+			repaint();
+		}
+
+		setGameSpeed((int)(score / 1000));
+	}
+
+	public void setGameSpeed(int level) {
+		gameSpeedLevel = Math.max(1, Math.min(level, gameSpeedDelay.length));
+		gameTimer.setDelay(getGameSpeed());
+	}
+
+	public int getGameSpeed() {
+		return gameSpeedDelay[gameSpeedLevel - 1];
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -79,13 +101,16 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		numLinesRemoved = 0;
 		curX = 0;
 		curY = 0;
+		
+		gameSpeedLevel = 1;
+		score = 0;
 	}
 
 	private void refreshText() {
 		if (isPaused)
 			statusbar.setText("paused");
 		else if (isStarted)
-			statusbar.setText(String.valueOf(numLinesRemoved));
+			statusbar.setText(String.valueOf("(level: " + gameSpeedLevel + ") score: " + score));
 		else
 			statusbar.setText("game over");
 	}
@@ -117,7 +142,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			showComboMessage(g, comboCount + " Combo!");
 		} else {
 			comboOpacity = 100;
-			showComboMessage(g, "XX");
+			showComboMessage(g, "");
 		}
 	}
 
@@ -134,9 +159,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		refreshText();
 
 		newPiece();
-		timer.start();
 		if (!bgm.isPlaying)
 			bgm.play();
+		gameTimer.start();
 	}
 
 	private void pause() {
@@ -145,11 +170,11 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 		isPaused = !isPaused;
 		if (isPaused) {
-			timer.stop();
 			bgm.pause();
+			gameTimer.stop();
 		} else {
-			timer.start();
 			bgm.resume();
+			gameTimer.start();
 		}
 
 		refreshText();
@@ -158,7 +183,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 	private void gameover() {
 		curPiece.setShape(Tetrominoes.NoShape);
-		timer.stop();
+		gameTimer.stop();
 		isStarted = false;
 		refreshText();
 		bgm.stop();
@@ -307,6 +332,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 			comboCount += 1;
 			comboOpacity = 100;
+			
+			score += numFullLines * 100 * comboCount;
 
 			repaint();
 			sound.play("sounds/beep1.wav", 1);
