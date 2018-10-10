@@ -26,8 +26,8 @@ public class Shape {
 				coords[i][j] = coordsTable[shape.ordinal()][i][j];
 			}
 		}
+		
 		pieceShape = shape;
-
 	}
 
 	private void setX(int index, int x) {

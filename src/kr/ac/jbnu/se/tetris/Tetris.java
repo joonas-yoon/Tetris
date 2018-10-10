@@ -1,9 +1,14 @@
 package kr.ac.jbnu.se.tetris;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -12,69 +17,82 @@ import javax.swing.border.LineBorder;
 public class Tetris extends JFrame {
 
 	JLabel statusbar;
+	JLabel scoreText;
 	BGM bgm = BGM.getInstance();
 
-	UIPane uipane;
-
-	int VIEWPORT_WIDTH = 480;
+	final int VIEWPORT_PADDING = 40;
+	int VIEWPORT_WIDTH = 520;
 	int VIEWPORT_HEIGHT = 640;
+
+	BlockPreviewer[] nextBlocksPreview;
 
 	public Tetris() {
 		statusbar = new JLabel(" 0");
+		statusbar.setForeground(Color.WHITE);
+
+		scoreText = new JLabel("score", JLabel.CENTER);
+		scoreText.setBackground(Color.GRAY);
+		scoreText.setForeground(Color.WHITE);
+		scoreText.setOpaque(true);
 
 		Board board = new Board(this);
 		board.setBackground(Color.WHITE);
 		board.setBorder(new LineBorder(Color.DARK_GRAY));
 		board.start();
 
-		uipane = new UIPane(board);
-		uipane.setBackground(Color.WHITE);
-		uipane.setBorder(new LineBorder(Color.RED));
-
 		JPanel info = new JPanel();
-		info.setBackground(Color.BLACK);
+		info.setBackground(Color.WHITE);
 		info.setBorder(new LineBorder(Color.BLACK));
-		info.setLayout(new FlowLayout());
+		info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
+		info.setPreferredSize(new Dimension(100, getHeight()));
 
-		JPanel pn = new JPanel();
-
-		GridBagConstraints[] gbc = new GridBagConstraints[4];
-
-		GridBagLayout gbl = new GridBagLayout();
-		pn.setLayout(gbl);
-
-		for (int i = 0; i < 4; i++) {
-			gbc[i] = new GridBagConstraints();
-			gbc[i].fill = GridBagConstraints.BOTH;
-			gbc[i].weightx = 1;
-			gbc[i].weighty = 1;
+		int nextBlockCount = board.nextBlocks.getSize();
+		nextBlocksPreview = new BlockPreviewer[nextBlockCount];
+		for (int i = 0; i < nextBlockCount; ++i) {
+			nextBlocksPreview[i] = new BlockPreviewer(board.nextBlocks.getBlock(i));
+			Color borderColor = Color.LIGHT_GRAY;
+			if (i == 0)
+				borderColor = Color.ORANGE;
+			nextBlocksPreview[i].setBorder(BorderFactory.createLineBorder(borderColor, 5));
+			info.add(nextBlocksPreview[i]);
 		}
 
-		gbc[0].gridx = 0;
-		gbc[0].gridy = 0;
-		gbc[0].gridheight = 2;
-		gbc[0].weightx = 2;
-		gbc[0].weighty = 5;
-		pn.add(board, gbc[0]);
+		JPanel pn = new JPanel();
+		pn.setLayout(new BorderLayout());
+		pn.setBorder(BorderFactory.createEmptyBorder(VIEWPORT_PADDING, 2 * VIEWPORT_PADDING, VIEWPORT_PADDING,
+				2 * VIEWPORT_PADDING));
+		pn.setMinimumSize(new Dimension(VIEWPORT_WIDTH - VIEWPORT_PADDING, VIEWPORT_HEIGHT - VIEWPORT_PADDING));
 
-		gbc[1].gridx = 1;
-		gbc[1].gridy = 0;
-		pn.add(uipane, gbc[1]);
+		JPanel scoreAndSettings = new JPanel(new GridLayout(1, 3));
+		JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-		gbc[2].gridx = 1;
-		gbc[2].gridy = 1;
-		gbc[2].weightx = 1;
-		gbc[2].weighty = 4;
-		pn.add(info, gbc[2]);
+		JButton settingButton = new JButton("[*]");
+		settingButton.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+		buttons.add(settingButton);
+		buttons.setOpaque(false);
+		buttons.setFocusable(false);
 
-		gbc[3].gridx = 0;
-		gbc[3].gridy = 2;
-		gbc[3].gridwidth = 2;
-		gbc[3].weightx = 3;
-		gbc[3].weighty = 0.1;
-		pn.add(statusbar, gbc[3]);
+		JLabel emptyLabel = new JLabel();
+		emptyLabel.setOpaque(false);
+
+		// scoreAndSettings.add(buttons);
+		scoreAndSettings.add(new JLabel());
+		scoreAndSettings.add(scoreText);
+		scoreAndSettings.add(emptyLabel);
+		scoreAndSettings.setOpaque(false);
+
+		pn.add(board, BorderLayout.CENTER);
+		pn.add(new JLabel("LEFT"), BorderLayout.LINE_START);
+		pn.add(info, BorderLayout.LINE_END);
+		pn.add(scoreAndSettings, BorderLayout.PAGE_START);
+		pn.add(statusbar, BorderLayout.PAGE_END);
+
+		board.requestFocusInWindow();
+
+		pn.setBackground(Color.black);
 
 		setContentPane(pn);
+
 		setTitle("Tetris");
 		setSize(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 		setVisible(true);
@@ -85,13 +103,23 @@ public class Tetris extends JFrame {
 		return statusbar;
 	}
 
-	public UIPane getUIPane() {
-		return uipane;
+	public JLabel getScoreText() {
+		return scoreText;
 	}
 
 	public static void main(String[] args) {
 		Tetris game = new Tetris();
 		game.setLocationRelativeTo(null);
 		game.setVisible(true);
+	}
+
+	public void updateNextBlocks(BlockFactory nextBlocks) {
+		if (nextBlocksPreview == null)
+			return;
+
+		int nextBlockCount = nextBlocks.getSize();
+		for (int i = 0; i < nextBlockCount; ++i) {
+			nextBlocksPreview[i].setBlock(nextBlocks.getBlock(i));
+		}
 	}
 }

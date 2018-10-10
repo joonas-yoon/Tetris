@@ -15,6 +15,8 @@ import javax.swing.Timer;
 
 public class Board extends TetrisGridPanel implements ActionListener {
 
+	Tetris parent;
+	
 	Timer gameTimer;
 	boolean isFallingFinished = false;
 	boolean isStarted = false;
@@ -26,7 +28,6 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	Shape curPiece;
 	Tetrominoes[] board;
 
-	UIPane uipane;
 	public BlockFactory nextBlocks = new BlockFactory(5);
 
 	SoundPlayer sound = new SoundPlayer();
@@ -40,15 +41,18 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	int[] gameSpeedDelay = { 400, 300, 200, 150, 100, 75, 50 };
 	
 	long score = 0;
+	JLabel scoreText;
 
 	public Board(Tetris parent) {
 		setFocusable(true);
+		requestFocusInWindow();
+		
 		curPiece = new Shape();
 		gameTimer = new Timer(getGameSpeed(), this);
 		gameTimer.start();
 
 		statusbar = parent.getStatusBar();
-		uipane = parent.getUIPane();
+		scoreText = parent.getScoreText();
 		board = new Tetrominoes[BoardWidth * BoardHeight];
 		addKeyListener(new TAdapter());
 		clearBoard();
@@ -61,6 +65,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 				observe();
 			}
 		}, observeDelay, observePeriod);
+		
+		this.parent = parent;
 	}
 	
 	private void observe(){
@@ -113,6 +119,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			statusbar.setText(String.valueOf("(level: " + gameSpeedLevel + ") score: " + score));
 		else
 			statusbar.setText("game over");
+		
+		scoreText.setText("SCORE: " + score);
 	}
 
 	private void showComboMessage(Graphics g, String text) {
@@ -255,6 +263,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	private void newPiece() {
 		curPiece = nextBlocks.getNextBlock();
 		nextBlocks.pop();
+		
+		parent.updateNextBlocks(nextBlocks);
+		
 		curX = BoardWidth / 2 + 1;
 		curY = BoardHeight - 1 + curPiece.minY();
 
@@ -326,7 +337,6 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 		if (numFullLines > 0) {
 			numLinesRemoved += numFullLines;
-			refreshText();
 			isFallingFinished = true;
 			curPiece.setShape(Tetrominoes.NoShape);
 
@@ -336,6 +346,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			score += numFullLines * 100 * comboCount;
 
 			repaint();
+			refreshText();
 			sound.play("sounds/beep1.wav", 1);
 		} else {
 			comboCount = 0;
