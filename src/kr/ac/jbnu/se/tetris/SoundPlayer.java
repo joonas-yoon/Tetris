@@ -9,6 +9,8 @@ import javax.sound.sampled.Clip;
 public class SoundPlayer {
 	private Clip clip;
 
+	public boolean isPlaying = false;
+
 	public SoundPlayer() {
 
 	}
@@ -21,10 +23,24 @@ public class SoundPlayer {
 			clip.open(ais);
 			clip.start();
 			clip.loop(loopCount);
+
+			isPlaying = true;
 		} catch (Exception ex) {
 			// TODO Auto-generated catch block
 			ex.printStackTrace();
 		}
+	}
+
+	public void pause() {
+		if (clip.isOpen())
+			clip.stop();
+		isPlaying = false;
+	}
+
+	public void resume() {
+		if (clip.isOpen())
+			clip.start();
+		isPlaying = true;
 	}
 
 	public void stop() {
@@ -34,6 +50,8 @@ public class SoundPlayer {
 		} catch (Exception ex) {
 			// TODO Auto-generated catch block
 			ex.printStackTrace();
+		} finally {
+			isPlaying = false;
 		}
 	}
 }

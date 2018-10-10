@@ -146,8 +146,10 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		isPaused = !isPaused;
 		if (isPaused) {
 			timer.stop();
+			bgm.pause();
 		} else {
 			timer.start();
+			bgm.resume();
 		}
 
 		refreshText();

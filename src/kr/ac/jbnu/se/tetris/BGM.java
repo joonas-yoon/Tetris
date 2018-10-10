@@ -20,17 +20,9 @@ public class BGM extends SoundPlayer {
 
 	public int currentId = 0;
 
-	public boolean isPlaying = false;
-
 	public void play() {
 		String filename = musicList[currentId];
 		super.play(defaultDirectory + "/" + filename, Clip.LOOP_CONTINUOUSLY);
-		isPlaying = true;
-	}
-
-	public void stop() {
-		super.stop();
-		isPlaying = false;
 	}
 
 	public void change(int newId) {
