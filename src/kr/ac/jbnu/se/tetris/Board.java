@@ -2,12 +2,14 @@ package kr.ac.jbnu.se.tetris;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
@@ -29,6 +31,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 	SoundPlayer sound = new SoundPlayer();
 	BGM bgm = BGM.getInstance();
+
+	Color comboFontColor = Color.BLACK;
+	int comboCount = 0;
 
 	public Board(Tetris parent) {
 		setFocusable(true);
@@ -66,13 +71,38 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	}
 
 	private void refreshText() {
-		System.out.println(isPaused);
 		if (isPaused)
 			statusbar.setText("paused");
 		else if (isStarted)
 			statusbar.setText(String.valueOf(numLinesRemoved));
 		else
 			statusbar.setText("game over");
+	}
+
+	private void showComboMessage(Graphics g, String text) {
+		if (g instanceof Graphics2D) {
+			Graphics2D g2d = (Graphics2D) g.create();
+
+			Font font = new Font("Comic Sans MS", Font.BOLD, 48);
+			g2d.setFont(font);
+			FontMetrics fm = g2d.getFontMetrics();
+			int x = ((getWidth() - fm.stringWidth(text)) / 2);
+			int y = ((getHeight() - fm.getHeight()) / 2) + fm.getAscent();
+
+			g2d.setColor(comboFontColor);
+			g2d.drawString(text, x, y);
+
+			g2d.dispose();
+		}
+	}
+
+	private void processCombo(Graphics g) {
+		// 0 for Test, 1 for production
+		if(comboCount > 0){
+			showComboMessage(g, comboCount + " Combo!");
+		} else {
+			showComboMessage(g, "");
+		}
 	}
 
 	public void start() {
@@ -140,6 +170,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		}
 
 		preview(g);
+
+		processCombo(g);
 	}
 
 	private void dropDown() {
@@ -257,6 +289,11 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			repaint();
 
 			sound.play("sounds/beep1.wav", 1);
+
+			comboCount += 1;
+		}
+		else {
+			comboCount = 0;
 		}
 	}
 
