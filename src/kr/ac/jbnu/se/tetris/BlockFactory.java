@@ -1,6 +1,7 @@
 package kr.ac.jbnu.se.tetris;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BlockFactory {
 
@@ -14,6 +15,9 @@ public class BlockFactory {
 	public Shape createBlock() {
 		Shape shape = new Shape();
 		shape.setRandomShape();
+		int rotateCount = new Random().nextInt(4);
+		while (rotateCount-- > 0)
+			shape = shape.rotateLeft();
 		return shape;
 	}
 
