@@ -4,14 +4,23 @@ import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 
 public class SoundPlayer {
 	private Clip clip = null;
 
 	public boolean isPlaying = false;
 
+	static int MAX_VOLUME = 10;
+	int volume = MAX_VOLUME;
+	int oldVolume;
+
 	public SoundPlayer() {
 
+	}
+
+	public SoundPlayer(int soundVolume) {
+		setVolume(soundVolume);
 	}
 
 	public void play(String filename, int loopCount) {
@@ -20,14 +29,32 @@ public class SoundPlayer {
 			clip = AudioSystem.getClip();
 			clip.stop();
 			clip.open(ais);
-			clip.start();
 			clip.loop(loopCount);
 
+			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+			float percent = (float) volume / MAX_VOLUME;
+			float dB = (float) (Math.log(percent) / Math.log(10.0) * 20.0);
+			gainControl.setValue(dB);
+
+			clip.start();
 			isPlaying = true;
 		} catch (Exception ex) {
 			// TODO Auto-generated catch block
 			ex.printStackTrace();
 		}
+	}
+
+	public void setVolume(int newVolume) {
+		volume = Math.max(0, Math.min(newVolume, 10));
+	}
+
+	public void mute() {
+		oldVolume = volume;
+		setVolume(0);
+	}
+
+	public void unmute() {
+		setVolume(oldVolume);
 	}
 
 	public void pause() {
