@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Random;
+
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
@@ -473,6 +475,22 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		}
 	}
 	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Stage
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private void generateRandomDummyBlock(int maxBlocks, int maxHeight) {
+		Random rand = new Random();
+		int blocks = rand.nextInt(maxBlocks + 1);
+		for(int i=0; i<blocks; ++i) {
+			int x = rand.nextInt(BoardWidth);
+			int y = rand.nextInt(maxHeight);
+			board[(y * BoardWidth) + x] = Tetrominoes.DeadShape;
+		}
+	}
+
 	void increaseVolumeMusic(int dv) {
 		Configurations.getInstance().getProperties().increaseVolumeMusic(dv);
 		Configurations.getInstance().save();

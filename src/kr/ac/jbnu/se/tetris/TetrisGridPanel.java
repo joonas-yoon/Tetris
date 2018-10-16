@@ -7,6 +7,10 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 public class TetrisGridPanel extends JPanel {
+	
+	public static Color BLOCK_COLORS[] = { new Color(0, 0, 0), new Color(204, 102, 102), new Color(102, 204, 102),
+			new Color(102, 102, 204), new Color(204, 204, 102), new Color(204, 102, 204), new Color(102, 204, 204),
+			new Color(218, 170, 0), new Color(128, 128, 128) };
 
 	int BoardWidth = 12;
 	int BoardHeight = 23;
@@ -42,11 +46,7 @@ public class TetrisGridPanel extends JPanel {
 	}
 
 	void drawRect(Graphics g, int x, int y, Tetrominoes shape, boolean translucent) {
-		Color colors[] = { new Color(0, 0, 0), new Color(204, 102, 102), new Color(102, 204, 102),
-				new Color(102, 102, 204), new Color(204, 204, 102), new Color(204, 102, 204), new Color(102, 204, 204),
-				new Color(218, 170, 0) };
-
-		Color color = colors[shape.ordinal()];
+		Color color = BLOCK_COLORS[shape.ordinal()];
 		if (translucent) {
 			Color newColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha() / 2);
 			color = newColor;
