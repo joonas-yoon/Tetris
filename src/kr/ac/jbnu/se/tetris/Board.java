@@ -408,11 +408,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			case KeyEvent.VK_SPACE:
 				dropDown();
 				break;
-			case 'd':
+			case KeyEvent.VK_D:
 				oneLineDown();
 				break;
-			case 'D':
-				oneLineDown();
 			case KeyEvent.VK_H:
 				holdCurrentPiece();
 				break;
