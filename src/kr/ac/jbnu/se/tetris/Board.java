@@ -148,7 +148,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 	private void processCombo(Graphics g) {
 		// 0 for Test, 1 for production
-		if (comboCount > 0) {
+		if (comboCount > 1) {
 			showComboMessage(g, comboCount + " Combo!");
 		} else {
 			comboOpacity = 100;
