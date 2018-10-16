@@ -25,6 +25,7 @@ public class Tetris extends JFrame {
 	int VIEWPORT_HEIGHT = 640;
 
 	BlockPreviewer[] nextBlocksPreview;
+	BlockPreviewer holdBlockPreview;
 
 	public Tetris() {
 		statusbar = new JLabel(" 0");
@@ -57,6 +58,9 @@ public class Tetris extends JFrame {
 			info.add(nextBlocksPreview[i]);
 		}
 
+		holdBlockPreview = new BlockPreviewer();
+		holdBlockPreview.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
+
 		JPanel pn = new JPanel();
 		pn.setLayout(new BorderLayout());
 		pn.setBorder(BorderFactory.createEmptyBorder(VIEWPORT_PADDING, 2 * VIEWPORT_PADDING, VIEWPORT_PADDING,
@@ -82,7 +86,7 @@ public class Tetris extends JFrame {
 		scoreAndSettings.setOpaque(false);
 
 		pn.add(board, BorderLayout.CENTER);
-		pn.add(new JLabel("LEFT"), BorderLayout.LINE_START);
+		pn.add(holdBlockPreview, BorderLayout.LINE_START);
 		pn.add(info, BorderLayout.LINE_END);
 		pn.add(scoreAndSettings, BorderLayout.PAGE_START);
 		pn.add(statusbar, BorderLayout.PAGE_END);

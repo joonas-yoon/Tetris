@@ -16,7 +16,7 @@ import javax.swing.Timer;
 public class Board extends TetrisGridPanel implements ActionListener {
 
 	Tetris parent;
-	
+
 	Timer gameTimer;
 	boolean isFallingFinished = false;
 	boolean isStarted = false;
@@ -39,14 +39,16 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 	int gameSpeedLevel = 1;
 	int[] gameSpeedDelay = { 400, 300, 200, 150, 100, 75, 50 };
-	
+
+	Shape holdPiece;
+
 	long score = 0;
 	JLabel scoreText;
 
 	public Board(Tetris parent) {
 		setFocusable(true);
 		requestFocusInWindow();
-		
+
 		curPiece = new Shape();
 		gameTimer = new Timer(getGameSpeed(), this);
 		gameTimer.start();
@@ -154,6 +156,23 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		}
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Hold
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	private void holdCurrentPiece() {
+		if (holdPiece == null) {
+			holdPiece = curPiece;
+			newPiece();
+		} else {
+			Shape tmpPiece = curPiece;
+			curPiece = holdPiece;
+			holdPiece = tmpPiece;
+		}
+		parent.holdBlockPreview.setBlock(holdPiece);
+	}
 	public void start() {
 		if (isPaused)
 			return;
@@ -394,6 +413,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 				break;
 			case 'D':
 				oneLineDown();
+			case KeyEvent.VK_H:
+				holdCurrentPiece();
 				break;
 			case KeyEvent.VK_1:
 				bgm.changePrev();
