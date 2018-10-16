@@ -10,23 +10,22 @@ public class Shape {
 
 	public Shape() {
 		coords = new int[4][2];
-		setShape(Tetrominoes.NoShape);
-	}
-
-	public void setShape(Tetrominoes shape) {
-
 		coordsTable = new int[][][] { { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
 				{ { 0, -1 }, { 0, 0 }, { -1, 0 }, { -1, 1 } }, { { 0, -1 }, { 0, 0 }, { 1, 0 }, { 1, 1 } },
 				{ { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 2 } }, { { -1, 0 }, { 0, 0 }, { 1, 0 }, { 0, 1 } },
 				{ { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } }, { { -1, -1 }, { 0, -1 }, { 0, 0 }, { 0, 1 } },
 				{ { 1, -1 }, { 0, -1 }, { 0, 0 }, { 0, 1 } } };
 
+		setShape(Tetrominoes.NoShape);
+	}
+
+	public void setShape(Tetrominoes shape) {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 2; ++j) {
 				coords[i][j] = coordsTable[shape.ordinal()][i][j];
 			}
 		}
-		
+
 		pieceShape = shape;
 	}
 
@@ -71,6 +70,30 @@ public class Shape {
 			m = Math.min(m, coords[i][1]);
 		}
 		return m;
+	}
+
+	public int maxX() {
+		int m = coords[0][0];
+		for (int i = 0; i < 4; i++) {
+			m = Math.max(m, coords[i][0]);
+		}
+		return m;
+	}
+
+	public int maxY() {
+		int m = coords[0][1];
+		for (int i = 0; i < 4; i++) {
+			m = Math.max(m, coords[i][1]);
+		}
+		return m;
+	}
+
+	public int getWidth() {
+		return maxX() - minX() + 1;
+	}
+
+	public int getHeight() {
+		return maxY() - minY() + 1;
 	}
 
 	public Shape rotateLeft() {

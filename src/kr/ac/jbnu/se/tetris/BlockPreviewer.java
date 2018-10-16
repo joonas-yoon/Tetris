@@ -7,17 +7,26 @@ public class BlockPreviewer extends TetrisGridPanel {
 	Shape block;
 
 	public BlockPreviewer() {
-		block = new Shape();
-		block.setShape(Tetrominoes.NoShape);
+		Shape tmp = new Shape();
+		tmp.setShape(Tetrominoes.NoShape);
+		setBlock(tmp);
+		resize();
 	}
 	
 	public BlockPreviewer(Shape block) {
-		setBlock(block); 
-		setSize(5, 5);
+		setBlock(block);
+		resize();
 	}
 	
 	public void setBlock(Shape block) {
 		this.block = block;
+		resize();
+		repaint();
+	}
+	
+	public void resize() {
+		int size = Math.max(block.getWidth(), block.getHeight()) + 2;
+		setSize(size, size);
 		repaint();
 	}
 
