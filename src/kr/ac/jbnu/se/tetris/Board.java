@@ -67,17 +67,23 @@ public class Board extends TetrisGridPanel implements ActionListener {
 				observe();
 			}
 		}, observeDelay, observePeriod);
-		
+
 		this.parent = parent;
 	}
-	
-	private void observe(){
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// General
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	private void observe() {
 		if (comboOpacity - 5 >= 0) {
 			comboOpacity -= 5;
 			repaint();
 		}
 
-		setGameSpeed((int)(score / 1000));
+		setGameSpeed((int) (score / 1000));
 	}
 
 	public void setGameSpeed(int level) {
@@ -87,15 +93,6 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 	public int getGameSpeed() {
 		return gameSpeedDelay[gameSpeedLevel - 1];
-	}
-
-	public void actionPerformed(ActionEvent e) {
-		if (isFallingFinished) {
-			isFallingFinished = false;
-			newPiece();
-		} else {
-			oneLineDown();
-		}
 	}
 
 	Tetrominoes shapeAt(int x, int y) {
@@ -109,10 +106,21 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		numLinesRemoved = 0;
 		curX = 0;
 		curY = 0;
-		
+
 		gameSpeedLevel = 1;
 		score = 0;
 	}
+
+	private void clearBoard() {
+		for (int i = 0; i < BoardHeight * BoardWidth; ++i)
+			board[i] = Tetrominoes.NoShape;
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// UI/View
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void refreshText() {
 		if (isPaused)
@@ -121,9 +129,15 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			statusbar.setText(String.valueOf("(level: " + gameSpeedLevel + ") score: " + score));
 		else
 			statusbar.setText("game over");
-		
+
 		scoreText.setText("SCORE: " + score);
 	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Combo System
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void showComboMessage(Graphics g, String text) {
 		if (g instanceof Graphics2D) {
@@ -173,6 +187,12 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		}
 		parent.holdBlockPreview.setBlock(holdPiece);
 	}
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Game Life-cycle
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	public void start() {
 		if (isPaused)
 			return;
@@ -217,6 +237,12 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		sound.play("sounds/gameover.wav", 0);
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Paint
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	public void paint(Graphics g) {
 		super.paint(g);
 
@@ -244,6 +270,20 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		processCombo(g);
 	}
 
+	private void preview(Graphics g) {
+		if (!isStarted || isPaused || isFallingFinished)
+			return;
+
+		int bottomPredict = getYPosPredict(curPiece, curX, curY);
+		drawShape(g, curX, bottomPredict, curPiece, true);
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Play
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	private void dropDown() {
 		int newY = curY;
 		while (newY > 0) {
@@ -257,11 +297,6 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	private void oneLineDown() {
 		if (!tryMoveOrFail(curPiece, curX, curY - 1))
 			pieceDropped();
-	}
-
-	private void clearBoard() {
-		for (int i = 0; i < BoardHeight * BoardWidth; ++i)
-			board[i] = Tetrominoes.NoShape;
 	}
 
 	private void pieceDropped() {
@@ -279,12 +314,21 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			newPiece();
 	}
 
+	public void actionPerformed(ActionEvent e) {
+		if (isFallingFinished) {
+			isFallingFinished = false;
+			newPiece();
+		} else {
+			oneLineDown();
+		}
+	}
+
 	private void newPiece() {
 		curPiece = nextBlocks.getNextBlock();
 		nextBlocks.pop();
-		
+
 		parent.updateNextBlocks(nextBlocks);
-		
+
 		curX = BoardWidth / 2 + 1;
 		curY = BoardHeight - 1 + curPiece.minY();
 
@@ -324,14 +368,6 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		return newY;
 	}
 
-	private void preview(Graphics g) {
-		if (!isStarted || isPaused || isFallingFinished)
-			return;
-
-		int bottomPredict = getYPosPredict(curPiece, curX, curY);
-		drawShape(g, curX, bottomPredict, curPiece, true);
-	}
-
 	private void removeFullLines() {
 		int numFullLines = 0;
 
@@ -361,7 +397,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 			comboCount += 1;
 			comboOpacity = 100;
-			
+
 			score += numFullLines * 100 * comboCount;
 
 			repaint();
@@ -371,6 +407,12 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			comboCount = 0;
 		}
 	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Key Event
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	class TAdapter extends KeyAdapter {
 		public void keyPressed(KeyEvent e) {
