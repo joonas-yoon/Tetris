@@ -21,6 +21,8 @@ public class BGM extends SoundPlayer {
 	public int currentId = 0;
 
 	public void play() {
+		setVolume(Configurations.getInstance().getProperties().getVolumeMusic());
+
 		String filename = musicList[currentId];
 		super.play(defaultDirectory + "/" + filename, Clip.LOOP_CONTINUOUSLY);
 	}

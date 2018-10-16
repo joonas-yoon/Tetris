@@ -462,8 +462,21 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			case KeyEvent.VK_2:
 				bgm.changeNext();
 				break;
+			case KeyEvent.VK_OPEN_BRACKET:
+				increaseVolumeMusic(-1);
+				break;
+			case KeyEvent.VK_CLOSE_BRACKET:
+				increaseVolumeMusic(+1);
+				break;
 			}
 
 		}
+	}
+	
+	void increaseVolumeMusic(int dv) {
+		Configurations.getInstance().getProperties().increaseVolumeMusic(dv);
+		Configurations.getInstance().save();
+
+		bgm.setVolume(Configurations.getInstance().getProperties().getVolumeMusic());
 	}
 }

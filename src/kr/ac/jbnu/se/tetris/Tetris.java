@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 public class Tetris extends JFrame {
+	
+	Configurations configs = Configurations.getInstance();
 
 	JLabel statusbar;
 	JLabel scoreText;
