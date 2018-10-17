@@ -147,22 +147,24 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void showComboMessage(Graphics g, String text) {
+		Color newColor = new Color(comboFontColor.getRed(), comboFontColor.getGreen(), comboFontColor.getBlue(),
+				comboOpacity * 255 / 100);
+		drawCenteredText(g, 0, comboOpacity / 5, text, newColor);
+	}
+
+	private void drawCenteredText(Graphics g, int offsetX, int offsetY, String text, Color fontColor) {
 		if (g instanceof Graphics2D) {
 			Graphics2D g2d = (Graphics2D) g.create();
 
-			Font font = new Font("Comic Sans MS", Font.BOLD, 48);
+			int fontSize = (int) (Math.min(squareHeight(), squareWidth()) * 1.5);
+
+			Font font = new Font("Comic Sans MS", Font.BOLD, fontSize);
 			g2d.setFont(font);
 			FontMetrics fm = g2d.getFontMetrics();
 			int x = ((getWidth() - fm.stringWidth(text)) / 2);
 			int y = ((getHeight() - fm.getHeight()) / 2) + fm.getAscent();
-
-			Color newColor = new Color(comboFontColor.getRed(), comboFontColor.getGreen(), comboFontColor.getBlue(),
-					comboOpacity * 255 / 100);
-			g2d.setColor(newColor);
-
-			y += comboOpacity / 5;
-			g2d.drawString(text, x, y);
-
+			g2d.setColor(fontColor);
+			g2d.drawString(text, x + offsetX, y + offsetY);
 			g2d.dispose();
 		}
 	}
