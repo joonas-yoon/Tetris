@@ -113,7 +113,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		gameSpeedLevel = 1;
 		score = 0;
 
+		curPiece.setShape(Tetrominoes.NoShape);
 		holdPiece.setShape(Tetrominoes.NoShape);
+		updateCurrentHoldPiece();
 	}
 
 	private void clearBoard() {
@@ -181,6 +183,12 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	//
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	private void updateCurrentHoldPiece() {
+		if (parent.holdBlockPreview != null) {
+			parent.holdBlockPreview.setBlock(holdPiece);
+		}
+	}
+
 	private void holdCurrentPiece() {
 		if (holdPiece.getShape() == Tetrominoes.NoShape) {
 			holdPiece = curPiece;
@@ -190,8 +198,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			curPiece = holdPiece;
 			holdPiece = tmpPiece;
 		}
-		parent.holdBlockPreview.setBlock(holdPiece);
+		updateCurrentHoldPiece();
 	}
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	// Game Life-cycle
@@ -234,7 +243,6 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	}
 
 	private void gameover() {
-		curPiece.setShape(Tetrominoes.NoShape);
 		gameTimer.stop();
 		isStarted = false;
 		refreshText();
