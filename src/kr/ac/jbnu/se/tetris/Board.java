@@ -52,6 +52,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		requestFocusInWindow();
 
 		curPiece = new Shape();
+		holdPiece = new Shape();
 		gameTimer = new Timer(getGameSpeed(), this);
 		gameTimer.start();
 
@@ -111,6 +112,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 		gameSpeedLevel = 1;
 		score = 0;
+
+		holdPiece.setShape(Tetrominoes.NoShape);
 	}
 
 	private void clearBoard() {
@@ -179,7 +182,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void holdCurrentPiece() {
-		if (holdPiece == null) {
+		if (holdPiece.getShape() == Tetrominoes.NoShape) {
 			holdPiece = curPiece;
 			newPiece();
 		} else {

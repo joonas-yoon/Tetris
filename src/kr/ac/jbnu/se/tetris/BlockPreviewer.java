@@ -45,7 +45,5 @@ public class BlockPreviewer extends TetrisGridPanel {
 			int y = BoardHeight / 2;
 			drawShape(g, x, y, block, false);
 		}
-
-		repaint();
 	}
 }
