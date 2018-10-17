@@ -227,11 +227,15 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		gameTimer.start();
 	}
 
-	private void pause() {
+	private void pause(boolean toggle) {
 		if (!isStarted)
 			return;
 
-		isPaused = !isPaused;
+		if (toggle)
+			isPaused = !isPaused;
+		else
+			isPaused = true;
+
 		if (isPaused) {
 			bgm.pause();
 			gameTimer.stop();
@@ -450,8 +454,13 @@ public class Board extends TetrisGridPanel implements ActionListener {
 				return;
 			}
 
-			if (keycode == 'p' || keycode == 'P') {
-				pause();
+			if (keycode == KeyEvent.VK_P) {
+				pause(true);
+				return;
+			}
+
+			if (keycode == KeyEvent.VK_ESCAPE) {
+				openSettingWindow();
 				return;
 			}
 
@@ -486,12 +495,6 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			case KeyEvent.VK_2:
 				bgm.changeNext();
 				break;
-			case KeyEvent.VK_OPEN_BRACKET:
-				increaseVolumeMusic(-1);
-				break;
-			case KeyEvent.VK_CLOSE_BRACKET:
-				increaseVolumeMusic(+1);
-				break;
 			}
 
 		}
@@ -513,10 +516,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		}
 	}
 
-	void increaseVolumeMusic(int dv) {
-		Configurations.getInstance().getProperties().increaseVolumeMusic(dv);
-		Configurations.getInstance().save();
-
-		bgm.setVolume(Configurations.getInstance().getProperties().getVolumeMusic());
+	private void openSettingWindow() {
+		pause(false);
+		Configurations.getInstance().createFrame();
 	}
 }

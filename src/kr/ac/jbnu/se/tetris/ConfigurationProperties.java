@@ -1,13 +1,17 @@
 package kr.ac.jbnu.se.tetris;
 
+import java.awt.event.KeyEvent;
 import java.io.Serializable;
 
 public class ConfigurationProperties implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private int volumeMusic = SoundPlayer.MAX_VOLUME;
-	private int volumeEffect = SoundPlayer.MAX_VOLUME;
+	int volumeMusic = SoundPlayer.MAX_VOLUME;
+	int volumeEffect = SoundPlayer.MAX_VOLUME;
+
+	int keyMoveLeft = KeyEvent.VK_LEFT;
+	int keyMoveRight = KeyEvent.VK_RIGHT;
 
 	public ConfigurationProperties() {
 
@@ -16,11 +20,11 @@ public class ConfigurationProperties implements Serializable {
 	public String toString() {
 		return "{" + volumeMusic + ", " + volumeEffect + "}";
 	}
-	
+
 	public void increaseVolumeMusic(int dv) {
 		volumeMusic = Math.max(0, Math.min(SoundPlayer.MAX_VOLUME, volumeMusic + dv));
 	}
-	
+
 	public int getVolumeMusic() {
 		return volumeMusic;
 	}
