@@ -276,8 +276,17 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			}
 		}
 
-		if (curPiece.getShape() != Tetrominoes.NoShape) {
-			drawShape(g, curX, curY, curPiece, false);
+		if (isPaused) {
+			Color oldColor = g.getColor();
+			Color fgLayerColor = new Color(0, 0, 0, 255 / 2);
+			g.setColor(fgLayerColor);
+			g.fillRect(0, 0, (int) size.getWidth(), (int) size.getHeight());
+			g.setColor(oldColor);
+			drawCenteredText(g, 0, 0, "PAUSED", Color.WHITE);
+		} else {
+			if (curPiece.getShape() != Tetrominoes.NoShape) {
+				drawShape(g, curX, curY, curPiece, false);
+			}
 		}
 
 		preview(g);
