@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JLabel;
@@ -20,9 +21,12 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	Tetris parent;
 
 	Timer gameTimer;
+
 	boolean isFallingFinished = false;
 	boolean isStarted = false;
 	boolean isPaused = false;
+	boolean isGameOvered = false;
+
 	int numLinesRemoved = 0;
 	int curX = 0;
 	int curY = 0;
@@ -106,6 +110,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		isFallingFinished = false;
 		isStarted = false;
 		isPaused = false;
+		isGameOvered = false;
+
 		numLinesRemoved = 0;
 		curX = 0;
 		curY = 0;
@@ -150,23 +156,6 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		Color newColor = new Color(comboFontColor.getRed(), comboFontColor.getGreen(), comboFontColor.getBlue(),
 				comboOpacity * 255 / 100);
 		drawCenteredText(g, 0, comboOpacity / 5, text, newColor);
-	}
-
-	protected void drawCenteredText(Graphics g, int offsetX, int offsetY, String text, Color fontColor) {
-		if (g instanceof Graphics2D) {
-			Graphics2D g2d = (Graphics2D) g.create();
-
-			int fontSize = (int) (Math.min(squareHeight(), squareWidth()) * 1.5);
-
-			Font font = new Font("Comic Sans MS", Font.BOLD, fontSize);
-			g2d.setFont(font);
-			FontMetrics fm = g2d.getFontMetrics();
-			int x = ((getWidth() - fm.stringWidth(text)) / 2);
-			int y = ((getHeight() - fm.getHeight()) / 2) + fm.getAscent();
-			g2d.setColor(fontColor);
-			g2d.drawString(text, x + offsetX, y + offsetY);
-			g2d.dispose();
-		}
 	}
 
 	protected void processCombo(Graphics g) {
@@ -245,12 +234,14 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		}
 
 		refreshText();
+
 		repaint();
 	}
 
 	protected void gameover() {
 		gameTimer.stop();
 		isStarted = false;
+		isPaused = isGameOvered = true;
 		refreshText();
 		bgm.stop();
 		sound.play("sounds/gameover.wav", 0);
@@ -281,12 +272,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		}
 
 		if (isPaused) {
-			Color oldColor = g.getColor();
-			Color fgLayerColor = new Color(0, 0, 0, 255 / 2);
-			g.setColor(fgLayerColor);
-			g.fillRect(0, 0, (int) size.getWidth(), (int) size.getHeight());
-			g.setColor(oldColor);
-			drawCenteredText(g, 0, 0, "PAUSED", Color.WHITE);
+			drawTitleText(g);
 		} else {
 			if (curPiece.getShape() != Tetrominoes.NoShape) {
 				drawShape(g, curX, curY, curPiece, false);
@@ -296,6 +282,57 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		preview(g);
 
 		processCombo(g);
+	}
+
+	protected void drawTitleText(Graphics g) {
+		Color oldColor = g.getColor();
+
+		ArrayList<String> texts = new ArrayList<>();
+
+		Color fgLayerColor;
+		if (isGameOvered) {
+			fgLayerColor = new Color(0, 0, 0, 255 * 2 / 3);
+		} else if (!isStarted) {
+			fgLayerColor = new Color(255, 200, 10, 255 / 2);
+		} else {
+			fgLayerColor = new Color(0, 0, 0, 255 / 2);
+		}
+
+		Dimension size = getSize();
+		g.setColor(fgLayerColor);
+		g.fillRect(0, 0, (int) size.getWidth(), (int) size.getHeight());
+		g.setColor(oldColor);
+
+		if (isGameOvered) {
+			texts.add("GAME OVER");
+		} else {
+			texts.add("PAUSED");
+		}
+
+		int offsetY = 0;
+		for (String text : texts) {
+			offsetY += drawCenteredText(g, 0, offsetY, text, Color.WHITE) * 1.25;
+		}
+	}
+
+	protected int drawCenteredText(Graphics g, int offsetX, int offsetY, String text, Color fontColor) {
+		if (g instanceof Graphics2D) {
+			Graphics2D g2d = (Graphics2D) g.create();
+
+			int fontSize = (int) (Math.min(squareHeight(), squareWidth()) * 1.5);
+
+			Font font = new Font("Comic Sans MS", Font.BOLD, fontSize);
+			g2d.setFont(font);
+			FontMetrics fm = g2d.getFontMetrics();
+			int x = ((getWidth() - fm.stringWidth(text)) / 2);
+			int y = ((getHeight() - fm.getHeight()) / 2) + fm.getAscent();
+			g2d.setColor(fontColor);
+			g2d.drawString(text, x + offsetX, y + offsetY);
+			g2d.dispose();
+
+			return fontSize;
+		}
+		return 0;
 	}
 
 	private void preview(Graphics g) {
