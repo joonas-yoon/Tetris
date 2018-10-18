@@ -38,7 +38,7 @@ public class Tetris extends JFrame {
 		scoreText.setForeground(Color.WHITE);
 		scoreText.setOpaque(true);
 
-		Board board = new Board(this);
+		Board board = new BoardStages(this);
 		board.setBackground(Color.WHITE);
 		board.setBorder(new LineBorder(Color.DARK_GRAY));
 		board.ready();

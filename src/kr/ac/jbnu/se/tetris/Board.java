@@ -579,19 +579,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	// Stage
+	// Configurations
 	//
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private void generateRandomDummyBlock(int maxBlocks, int maxHeight) {
-		Random rand = new Random();
-		int blocks = rand.nextInt(maxBlocks + 1);
-		for(int i=0; i<blocks; ++i) {
-			int x = rand.nextInt(BoardWidth);
-			int y = rand.nextInt(maxHeight);
-			board[(y * BoardWidth) + x] = Tetrominoes.DeadShape;
-		}
-	}
 
 	private void openSettingWindow() {
 		pause(false);
