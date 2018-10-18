@@ -79,19 +79,9 @@ public class Tetris extends JFrame {
 		pn.setMinimumSize(new Dimension(VIEWPORT_WIDTH - VIEWPORT_PADDING, VIEWPORT_HEIGHT - VIEWPORT_PADDING));
 
 		JPanel scoreAndSettings = new JPanel(new GridLayout(1, 3));
-		JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		JButton settingButton = new JButton("[*]");
-		buttons.add(settingButton);
-		buttons.setOpaque(false);
-		buttons.setFocusable(false);
-
-		JLabel emptyLabel = new JLabel();
-		emptyLabel.setOpaque(false);
-
-		// scoreAndSettings.add(buttons);
 		scoreAndSettings.add(new JLabel());
 		scoreAndSettings.add(scoreText);
-		scoreAndSettings.add(emptyLabel);
+		scoreAndSettings.add(new JLabel());
 		scoreAndSettings.setOpaque(false);
 
 		pn.add(board, BorderLayout.CENTER);

@@ -11,8 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Random;
-
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
@@ -91,8 +89,6 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			comboOpacity -= 5;
 			repaint();
 		}
-
-		setGameSpeed((int) (score / 1000));
 	}
 
 	public void setGameSpeed(int level) {
@@ -143,9 +139,6 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			statusbar.setText("paused");
 		else if (isStarted)
 			statusbar.setText(String.valueOf("(level: " + gameSpeedLevel + ") score: " + score));
-		else
-			statusbar.setText("game over");
-
 		scoreText.setText("SCORE: " + score);
 	}
 
@@ -489,6 +482,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			comboOpacity = 100;
 
 			score += numFullLines * 100 * comboCount;
+
+			setGameSpeed((int) (score / 10000));
 
 			repaint();
 			refreshText();
