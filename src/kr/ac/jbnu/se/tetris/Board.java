@@ -26,6 +26,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	boolean isStarted = false;
 	boolean isPaused = false;
 	boolean isGameOvered = false;
+	boolean isGameCleared = false;
 
 	int numLinesRemoved = 0;
 	int curX = 0;
@@ -112,6 +113,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		isStarted = false;
 		isPaused = false;
 		isGameOvered = false;
+		isGameCleared = false;
 
 		numLinesRemoved = 0;
 		curX = 0;
@@ -255,6 +257,13 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		sound.play("sounds/gameover.wav", 0);
 	}
 
+	protected void gameClear() {
+		gameTimer.stop();
+		isPaused = isGameCleared = true;
+		refreshText();
+		bgm.stop();
+	}
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	// Paint
@@ -300,6 +309,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		Color fgLayerColor;
 		if (isGameOvered) {
 			fgLayerColor = new Color(0, 0, 0, 255 * 2 / 3);
+		} else if (isGameCleared) {
+			fgLayerColor = new Color(30, 170, 80, 255 / 2);
 		} else if (!isStarted) {
 			fgLayerColor = new Color(255, 200, 10, 255 / 2);
 		} else {
@@ -313,6 +324,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 		if (isGameOvered) {
 			texts.add("GAME OVER");
+		} else if (isGameCleared) {
+			texts.add("CLEAR!");
+			texts.add("(press ENTER)");
 		} else if (!isStarted) {
 			texts.add("READY");
 			texts.add("(press ENTER)");
@@ -491,16 +505,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	// Key Event
 	//
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	protected void gameKeyPressed(KeyEvent e){
-		int keycode = e.getKeyCode();
 
-		if (isGameOvered) {
-			if (keycode == KeyEvent.VK_ENTER) {
-				start();
-				return;
-			}
-		}
+	protected void gameKeyPressed(KeyEvent e) {
+		int keycode = e.getKeyCode();
 
 		if (keycode == KeyEvent.VK_P) {
 			pause(true);
@@ -509,6 +516,13 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 		if (keycode == KeyEvent.VK_ESCAPE) {
 			openSettingWindow();
+			return;
+		}
+
+		if (isGameCleared || isGameOvered) {
+			if (keycode == KeyEvent.VK_ENTER) {
+				ready();
+			}
 			return;
 		}
 

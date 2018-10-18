@@ -41,7 +41,7 @@ public class Tetris extends JFrame {
 		Board board = new Board(this);
 		board.setBackground(Color.WHITE);
 		board.setBorder(new LineBorder(Color.DARK_GRAY));
-		board.start();
+		board.ready();
 
 		JPanel info = new JPanel();
 		info.setBackground(Color.WHITE);
