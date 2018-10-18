@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -15,16 +17,16 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 public class Tetris extends JFrame {
-	
+
 	Configurations configs = Configurations.getInstance();
 
 	JLabel statusbar;
 	JLabel scoreText;
 	BGM bgm = BGM.getInstance();
 
-	final int VIEWPORT_PADDING = 40;
-	int VIEWPORT_WIDTH = 520;
-	int VIEWPORT_HEIGHT = 640;
+	final int VIEWPORT_PADDING = 30;
+	int VIEWPORT_WIDTH = 600;
+	int VIEWPORT_HEIGHT = 800;
 
 	BlockPreviewer[] nextBlocksPreview;
 	BlockPreviewer holdBlockPreview;
@@ -43,37 +45,42 @@ public class Tetris extends JFrame {
 		board.setBorder(new LineBorder(Color.DARK_GRAY));
 		board.ready();
 
-		JPanel info = new JPanel();
-		info.setBackground(Color.WHITE);
-		info.setBorder(new LineBorder(Color.BLACK));
-		info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
-		info.setPreferredSize(new Dimension(100, getHeight()));
+		JPanel blockPreviewsPanel = new JPanel();
+		blockPreviewsPanel.setBorder(new LineBorder(Color.BLACK));
+		blockPreviewsPanel.setLayout(new BoxLayout(blockPreviewsPanel, BoxLayout.Y_AXIS));
+		blockPreviewsPanel.setPreferredSize(new Dimension(100, 100));
+		blockPreviewsPanel.setOpaque(false);
+
+		ArrayList<BlockPreviewer> blockPanels = new ArrayList<>();
+
+		holdBlockPreview = new BlockPreviewer();
+		holdBlockPreview.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
+		blockPanels.add(holdBlockPreview);
 
 		int nextBlockCount = board.nextBlocks.getSize();
 		nextBlocksPreview = new BlockPreviewer[nextBlockCount];
 		for (int i = 0; i < nextBlockCount; ++i) {
 			nextBlocksPreview[i] = new BlockPreviewer(board.nextBlocks.getBlock(i));
-			Color borderColor = Color.LIGHT_GRAY;
-			if (i == 0)
-				borderColor = Color.ORANGE;
+			Color borderColor = i == 0 ? Color.RED : Color.LIGHT_GRAY;
 			nextBlocksPreview[i].setBorder(BorderFactory.createLineBorder(borderColor, 5));
-			info.add(nextBlocksPreview[i]);
+			blockPanels.add(nextBlocksPreview[i]);
 		}
 
-		holdBlockPreview = new BlockPreviewer();
-		holdBlockPreview.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
+		for (BlockPreviewer bp : blockPanels) {
+			JPanel tmpPane = new JPanel(new GridBagLayout());
+			tmpPane.add(bp);
+			blockPreviewsPanel.add(tmpPane);
+		}
 
 		JPanel pn = new JPanel();
 		pn.setLayout(new BorderLayout());
-		pn.setBorder(BorderFactory.createEmptyBorder(VIEWPORT_PADDING, 2 * VIEWPORT_PADDING, VIEWPORT_PADDING,
-				2 * VIEWPORT_PADDING));
+		pn.setBorder(BorderFactory.createEmptyBorder(VIEWPORT_PADDING, 3 * VIEWPORT_PADDING, VIEWPORT_PADDING,
+				3 * VIEWPORT_PADDING));
 		pn.setMinimumSize(new Dimension(VIEWPORT_WIDTH - VIEWPORT_PADDING, VIEWPORT_HEIGHT - VIEWPORT_PADDING));
 
 		JPanel scoreAndSettings = new JPanel(new GridLayout(1, 3));
 		JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
 		JButton settingButton = new JButton("[*]");
-		settingButton.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		buttons.add(settingButton);
 		buttons.setOpaque(false);
 		buttons.setFocusable(false);
@@ -88,8 +95,7 @@ public class Tetris extends JFrame {
 		scoreAndSettings.setOpaque(false);
 
 		pn.add(board, BorderLayout.CENTER);
-		pn.add(holdBlockPreview, BorderLayout.LINE_START);
-		pn.add(info, BorderLayout.LINE_END);
+		pn.add(blockPreviewsPanel, BorderLayout.LINE_START);
 		pn.add(scoreAndSettings, BorderLayout.PAGE_START);
 		pn.add(statusbar, BorderLayout.PAGE_END);
 

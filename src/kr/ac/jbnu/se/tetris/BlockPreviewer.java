@@ -1,6 +1,7 @@
 package kr.ac.jbnu.se.tetris;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 
 public class BlockPreviewer extends TetrisGridPanel {
@@ -45,5 +46,16 @@ public class BlockPreviewer extends TetrisGridPanel {
 			int y = BoardHeight / 2;
 			drawShape(g, x, y, block, false);
 		}
+	}
+
+	@Override
+	public Dimension getPreferredSize() {
+		// Relies on being the only component
+		// in a layout that will center it without
+		// expanding it to fill all the space.
+		Dimension d = this.getParent().getSize();
+		int newSize = Math.min(d.width, d.height);
+		newSize = newSize == 0 ? Math.min(squareWidth(), squareHeight()) : newSize;
+		return new Dimension(newSize, newSize);
 	}
 }

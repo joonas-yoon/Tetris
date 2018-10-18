@@ -13,7 +13,7 @@ public class TetrisGridPanel extends JPanel {
 			new Color(218, 170, 0), new Color(128, 128, 128) };
 
 	int BoardWidth = 12;
-	int BoardHeight = 23;
+	int BoardHeight = 25;
 
 	public void setSize(int width, int height) {
 		BoardWidth = width;
