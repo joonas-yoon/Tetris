@@ -102,7 +102,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		return board[(y * BoardWidth) + x];
 	}
 
-	private void init() {
+	protected void init() {
 		isFallingFinished = false;
 		isStarted = false;
 		isPaused = false;
@@ -118,7 +118,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		updateCurrentHoldPiece();
 	}
 
-	private void clearBoard() {
+	protected void clearBoard() {
 		for (int i = 0; i < BoardHeight * BoardWidth; ++i)
 			board[i] = Tetrominoes.NoShape;
 	}
@@ -129,7 +129,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	//
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	private void refreshText() {
+	protected void refreshText() {
 		if (isPaused)
 			statusbar.setText("paused");
 		else if (isStarted)
@@ -146,13 +146,13 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	//
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	private void showComboMessage(Graphics g, String text) {
+	protected void showComboMessage(Graphics g, String text) {
 		Color newColor = new Color(comboFontColor.getRed(), comboFontColor.getGreen(), comboFontColor.getBlue(),
 				comboOpacity * 255 / 100);
 		drawCenteredText(g, 0, comboOpacity / 5, text, newColor);
 	}
 
-	private void drawCenteredText(Graphics g, int offsetX, int offsetY, String text, Color fontColor) {
+	protected void drawCenteredText(Graphics g, int offsetX, int offsetY, String text, Color fontColor) {
 		if (g instanceof Graphics2D) {
 			Graphics2D g2d = (Graphics2D) g.create();
 
@@ -169,7 +169,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		}
 	}
 
-	private void processCombo(Graphics g) {
+	protected void processCombo(Graphics g) {
 		// 0 for Test, 1 for production
 		if (comboCount > 1) {
 			showComboMessage(g, comboCount + " Combo!");
@@ -185,13 +185,13 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	//
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	private void updateCurrentHoldPiece() {
+	protected void updateCurrentHoldPiece() {
 		if (parent.holdBlockPreview != null) {
 			parent.holdBlockPreview.setBlock(holdPiece);
 		}
 	}
 
-	private void holdCurrentPiece() {
+	protected void holdCurrentPiece() {
 		if (holdPiece.getShape() == Tetrominoes.NoShape) {
 			holdPiece = curPiece;
 			newPiece();
@@ -248,7 +248,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		repaint();
 	}
 
-	private void gameover() {
+	protected void gameover() {
 		gameTimer.stop();
 		isStarted = false;
 		refreshText();
@@ -396,7 +396,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		return newY;
 	}
 
-	private void removeFullLines() {
+	protected int removeFullLines() {
 		int numFullLines = 0;
 
 		for (int i = BoardHeight - 1; i >= 0; --i) {
@@ -434,6 +434,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		} else {
 			comboCount = 0;
 		}
+
+		return numFullLines;
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
