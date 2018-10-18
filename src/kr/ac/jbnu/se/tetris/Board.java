@@ -441,65 +441,71 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	// Key Event
 	//
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	protected void gameKeyPressed(KeyEvent e){
+		int keycode = e.getKeyCode();
+
+		if (isGameOvered) {
+			if (keycode == KeyEvent.VK_ENTER) {
+				start();
+				return;
+			}
+		}
+
+		if (keycode == KeyEvent.VK_P) {
+			pause(true);
+			return;
+		}
+
+		if (keycode == KeyEvent.VK_ESCAPE) {
+			openSettingWindow();
+			return;
+		}
+
+		if (isPaused)
+			return;
+
+		switch (keycode) {
+		case KeyEvent.VK_LEFT:
+			tryMoveOrFail(curPiece, curX - 1, curY);
+			break;
+		case KeyEvent.VK_RIGHT:
+			tryMoveOrFail(curPiece, curX + 1, curY);
+			break;
+		case KeyEvent.VK_DOWN:
+			tryMoveOrFail(curPiece.rotateRight(), curX, curY);
+			break;
+		case KeyEvent.VK_UP:
+			tryMoveOrFail(curPiece.rotateLeft(), curX, curY);
+			break;
+		case KeyEvent.VK_SPACE:
+			dropDown();
+			break;
+		case KeyEvent.VK_D:
+			oneLineDown();
+			break;
+		case KeyEvent.VK_H:
+			holdCurrentPiece();
+			break;
+		case KeyEvent.VK_1:
+			bgm.changePrev();
+			break;
+		case KeyEvent.VK_2:
+			bgm.changeNext();
+			break;
+		case KeyEvent.VK_3:
+			gameClear();
+			break;
+		}
+
+	}
 
 	class TAdapter extends KeyAdapter {
 		public void keyPressed(KeyEvent e) {
-
-			int keycode = e.getKeyCode();
-
-			if (!isStarted || curPiece.getShape() == Tetrominoes.NoShape) {
-				if (keycode == KeyEvent.VK_ENTER) {
-					start();
-				}
-				return;
-			}
-
-			if (keycode == KeyEvent.VK_P) {
-				pause(true);
-				return;
-			}
-
-			if (keycode == KeyEvent.VK_ESCAPE) {
-				openSettingWindow();
-				return;
-			}
-
-			if (isPaused)
-				return;
-
-			switch (keycode) {
-			case KeyEvent.VK_LEFT:
-				tryMoveOrFail(curPiece, curX - 1, curY);
-				break;
-			case KeyEvent.VK_RIGHT:
-				tryMoveOrFail(curPiece, curX + 1, curY);
-				break;
-			case KeyEvent.VK_DOWN:
-				tryMoveOrFail(curPiece.rotateRight(), curX, curY);
-				break;
-			case KeyEvent.VK_UP:
-				tryMoveOrFail(curPiece.rotateLeft(), curX, curY);
-				break;
-			case KeyEvent.VK_SPACE:
-				dropDown();
-				break;
-			case KeyEvent.VK_D:
-				oneLineDown();
-				break;
-			case KeyEvent.VK_H:
-				holdCurrentPiece();
-				break;
-			case KeyEvent.VK_1:
-				bgm.changePrev();
-				break;
-			case KeyEvent.VK_2:
-				bgm.changeNext();
-				break;
-			}
-
+			gameKeyPressed(e);
 		}
 	}
-	
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	// Stage
