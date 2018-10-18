@@ -58,7 +58,6 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		curPiece = new Shape();
 		holdPiece = new Shape();
 		gameTimer = new Timer(getGameSpeed(), this);
-		gameTimer.start();
 
 		statusbar = parent.getStatusBar();
 		scoreText = parent.getScoreText();
@@ -76,6 +75,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		}, observeDelay, observePeriod);
 
 		this.parent = parent;
+
+		ready();
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -198,17 +199,24 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	//
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	protected void ready() {
+		init();
+		clearBoard();
+		refreshText();
+
+		isStarted = false;
+
+		numLinesRemoved = 0;
+
+		gameTimer.stop();
+	}
+
 	public void start() {
 		if (isPaused)
 			return;
 
-		init();
-
 		isStarted = true;
 		isFallingFinished = false;
-		numLinesRemoved = 0;
-		clearBoard();
-		refreshText();
 
 		newPiece();
 		if (!bgm.isPlaying)
@@ -271,7 +279,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			}
 		}
 
-		if (isPaused) {
+		if (isPaused || !isStarted) {
 			drawTitleText(g);
 		} else {
 			if (curPiece.getShape() != Tetrominoes.NoShape) {
@@ -305,6 +313,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 		if (isGameOvered) {
 			texts.add("GAME OVER");
+		} else if (!isStarted) {
+			texts.add("READY");
+			texts.add("(press ENTER)");
 		} else {
 			texts.add("PAUSED");
 		}
@@ -498,6 +509,13 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 		if (keycode == KeyEvent.VK_ESCAPE) {
 			openSettingWindow();
+			return;
+		}
+
+		if (!isStarted) {
+			if (keycode == KeyEvent.VK_ENTER) {
+				start();
+			}
 			return;
 		}
 
