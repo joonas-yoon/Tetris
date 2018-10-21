@@ -36,6 +36,12 @@ public class Configurations extends JFrame {
 
 	private JLabel volumeEffectText = new JLabel("<effect: load..>");
 
+	private JButton bgmSelectPrevButton;
+
+	private JButton bgmSelectNextButton;
+
+	private JLabel bgmSelectText = new JLabel("<bgm: load..>");
+
 	private Configurations() {
 		panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -91,13 +97,30 @@ public class Configurations extends JFrame {
 				save();
 			}
 		});
+		
+		bgmSelectPrevButton = new JButton("<<");
+		bgmSelectNextButton = new JButton(">>");
+		bgmSelectPrevButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BGM.getInstance().changePrev();
+				save();
+			}
+		});
+		bgmSelectNextButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BGM.getInstance().changeNext();
+				save();
+			}
+		});
 
-		JPanel p1 = new JPanel();
-		p1.setLayout(new FlowLayout(FlowLayout.CENTER));
-		p1.add(volumeMusicDownButton);
-		p1.add(volumeMusicText);
-		p1.add(volumeMusicUpButton);
-		panel.add(p1);
+		JPanel pMusic = new JPanel();
+		pMusic.setLayout(new FlowLayout(FlowLayout.CENTER));
+		pMusic.add(volumeMusicDownButton);
+		pMusic.add(volumeMusicText);
+		pMusic.add(volumeMusicUpButton);
+		panel.add(pMusic);
 
 		JPanel pEffect = new JPanel();
 		pEffect.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -106,15 +129,24 @@ public class Configurations extends JFrame {
 		pEffect.add(volumeEffectUpButton);
 		panel.add(pEffect);
 
-		JPanel p2 = new JPanel();
-		p2.add(keybindButton);
-		panel.add(p2);
+		JPanel pBgm = new JPanel();
+		pBgm.setLayout(new FlowLayout(FlowLayout.CENTER));
+		pBgm.add(bgmSelectPrevButton);
+		pBgm.add(bgmSelectText);
+		pBgm.add(bgmSelectNextButton);
+		panel.add(pBgm);
 
-		JPanel p3 = new JPanel();
-		p3.add(closeButton);
-		panel.add(p3);
+		JPanel pKeyBinds = new JPanel();
+		pKeyBinds.add(keybindButton);
+		panel.add(pKeyBinds);
+
+		JPanel pClose = new JPanel();
+		pClose.add(closeButton);
+		panel.add(pClose);
 
 		add(panel);
+
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 
 	public static Configurations getInstance() {
@@ -141,13 +173,14 @@ public class Configurations extends JFrame {
 
 	public void closeFrame() {
 		setVisible(false);
-		dispose();
+		this.dispose();
 	}
 
 	public void update() {
 		if (properties != null) {
-			volumeMusicText.setText("<music: " + properties.getVolumeMusic() + ">");
-			volumeEffectText.setText("<Effect: " + properties.getVolumeEffect() + ">");
+			volumeMusicText.setText("<Music Vol: " + properties.getVolumeMusic() + ">");
+			volumeEffectText.setText("<Effect Vol: " + properties.getVolumeEffect() + ">");
+			bgmSelectText.setText("<BGM: " + BGM.musicTitle[properties.bgmId] + ">");
 		}
 	}
 

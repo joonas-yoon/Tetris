@@ -11,6 +11,7 @@ public class ConfigurationProperties implements Serializable {
 
 	int volumeMusic = SoundPlayer.MAX_VOLUME;
 	int volumeEffect = SoundPlayer.MAX_VOLUME;
+	int bgmId = 0;
 
 	KeyBind keyMoveLeft = new KeyBind(KeyEvent.VK_LEFT);
 	KeyBind keyMoveRight = new KeyBind(KeyEvent.VK_RIGHT);
