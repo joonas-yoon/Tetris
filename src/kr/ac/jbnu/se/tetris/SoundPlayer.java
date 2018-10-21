@@ -15,6 +15,9 @@ public class SoundPlayer {
 	int volume = MAX_VOLUME;
 	int oldVolume;
 
+	String oldFilename = "";
+	int oldLoopCount = 0;
+
 	public SoundPlayer() {
 
 	}
@@ -37,15 +40,34 @@ public class SoundPlayer {
 			gainControl.setValue(dB);
 
 			clip.start();
+
 			isPlaying = true;
+
+			oldFilename = filename;
+			oldLoopCount = loopCount;
+
 		} catch (Exception ex) {
 			// TODO Auto-generated catch block
 			ex.printStackTrace();
 		}
 	}
 
+	public void replay() {
+		if (!isPlaying)
+			return;
+
+		if (oldFilename != "") {
+			stop();
+			play(oldFilename, oldLoopCount);
+		}
+	}
+
 	public void setVolume(int newVolume) {
-		volume = Math.max(0, Math.min(newVolume, 10));
+		newVolume = Math.max(0, Math.min(newVolume, 10));
+		if (volume != newVolume) {
+			volume = newVolume;
+			replay();
+		}
 	}
 
 	public void mute() {
