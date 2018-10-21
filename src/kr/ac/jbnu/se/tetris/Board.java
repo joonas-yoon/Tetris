@@ -127,6 +127,10 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		for (int i = 0; i < BoardHeight * BoardWidth; ++i)
 			board[i] = Tetrominoes.NoShape;
 	}
+	
+	protected void quit(){
+		gameTimer.stop();
+	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//

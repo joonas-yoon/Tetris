@@ -3,14 +3,12 @@ package kr.ac.jbnu.se.tetris;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -30,8 +28,15 @@ public class Tetris extends JFrame {
 
 	BlockPreviewer[] nextBlocksPreview;
 	BlockPreviewer holdBlockPreview;
+	
+	StartScreen parent;
+	Board board;
 
-	public Tetris() {
+	public Tetris(StartScreen parent) {
+		this.parent = parent;
+	}
+	
+	public void createFrame(boolean isStageMode){
 		statusbar = new JLabel(" 0");
 		statusbar.setForeground(Color.WHITE);
 
@@ -40,7 +45,11 @@ public class Tetris extends JFrame {
 		scoreText.setForeground(Color.WHITE);
 		scoreText.setOpaque(true);
 
-		Board board = new BoardStages(this);
+		if(isStageMode){
+			board = new BoardStages(this);
+		} else {
+			board = new Board(this);
+		}
 		board.setBackground(Color.WHITE);
 		board.setBorder(new LineBorder(Color.DARK_GRAY));
 		board.ready();
@@ -98,7 +107,17 @@ public class Tetris extends JFrame {
 		setTitle("Tetris");
 		setSize(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 		setVisible(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+	}
+	
+	@Override
+	public void dispose() {
+		parent.createFrame();
+		if(board != null){
+			board.quit();
+		}
+		super.dispose();
 	}
 
 	public JLabel getStatusBar() {
@@ -107,12 +126,6 @@ public class Tetris extends JFrame {
 
 	public JLabel getScoreText() {
 		return scoreText;
-	}
-
-	public static void main(String[] args) {
-		Tetris game = new Tetris();
-		game.setLocationRelativeTo(null);
-		game.setVisible(true);
 	}
 
 	public void updateNextBlocks(BlockFactory nextBlocks) {
