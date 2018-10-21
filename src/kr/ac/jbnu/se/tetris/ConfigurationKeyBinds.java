@@ -56,6 +56,15 @@ public class ConfigurationKeyBinds extends JFrame {
 
 		public void keyPressed(KeyEvent e) {
 			int keyCode = e.getKeyCode();
+
+			// is it binded already?
+			for(int i=0; i<ConfigurationProperties.KEY_BINDING_COUNT; i++){
+				if(configKeys[i].getCode() == keyCode){
+					infoText.setText("Already Use");
+					return;
+				}
+			}
+			
 			key.set(keyCode);
 			button.setText(key.getText());
 			this.dispose();
