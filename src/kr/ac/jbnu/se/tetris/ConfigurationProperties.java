@@ -20,6 +20,8 @@ public class ConfigurationProperties implements Serializable {
 	KeyBind keyPaused = new KeyBind(KeyEvent.VK_P);
 	KeyBind keyDrop = new KeyBind(KeyEvent.VK_SPACE);
 	KeyBind keyHold = new KeyBind(KeyEvent.VK_H);
+	
+	public static final int KEY_BINDING_COUNT = 8;
 
 	public ConfigurationProperties() {
 

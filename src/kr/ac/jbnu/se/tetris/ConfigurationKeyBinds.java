@@ -1,16 +1,17 @@
 package kr.ac.jbnu.se.tetris;
 
-import java.awt.FlowLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 public class ConfigurationKeyBinds extends JFrame {
 
@@ -19,16 +20,12 @@ public class ConfigurationKeyBinds extends JFrame {
 	private class Detector extends JFrame implements KeyListener {
 
 		JPanel panel = new JPanel();
-		JLabel detectedKey = new JLabel("[NONE]");
-
+		JLabel infoText = new JLabel("Press Any Key");
 		JButton button;
 		KeyBind key;
 
 		Detector() {
-			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-			panel.add(new JLabel("Press Any Key:"));
-			panel.add(detectedKey);
+			panel.add(infoText);
 
 			add(panel);
 			pack();
@@ -40,8 +37,8 @@ public class ConfigurationKeyBinds extends JFrame {
 
 			addKeyListener(this);
 		}
-	
-		public void createFrame(JButton btn, KeyBind targetKey){
+
+		public void createFrame(JButton btn, KeyBind targetKey) {
 			button = btn;
 			key = targetKey;
 
@@ -60,10 +57,8 @@ public class ConfigurationKeyBinds extends JFrame {
 		public void keyPressed(KeyEvent e) {
 			int keyCode = e.getKeyCode();
 			key.set(keyCode);
-			detectedKey.setText("[ " + key.getText() + " ]");
 			button.setText(key.getText());
-			
-			System.out.println(">> " + Configurations.getInstance().getProperties());
+			this.dispose();
 		}
 
 		@Override
@@ -83,71 +78,50 @@ public class ConfigurationKeyBinds extends JFrame {
 
 	JLabel keyLeftText = new JLabel();
 
-	private JButton rightButton = new JButton();
+	ConfigurationProperties properties = Configurations.getInstance().getProperties();
 
-	private JButton leftButton = new JButton();
-	
-	private JButton holdButton = new JButton();
+	KeyBind[] configKeys = { properties.keyMoveLeft, properties.keyMoveRight, properties.keyMoveDown,
+			properties.keyRotateLeft, properties.keyRotateRight, properties.keyPaused, properties.keyDrop,
+			properties.keyHold };
+
+	private JButton[] buttons = new JButton[ConfigurationProperties.KEY_BINDING_COUNT];
 
 	public ConfigurationKeyBinds() {
 		setTitle("Config - Key Bindings");
-		setSize(300, 300);
 
 		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setLayout(new GridLayout(buttons.length, 2));
 
-		leftButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				detector.createFrame(leftButton, Configurations.getInstance().getProperties().keyMoveLeft);
-			}
-		});
+		String[] titles = { "Move Left", "Move Right", "Move Down", "Rotate Left", "Rotate Right", "Paused", "Drop",
+				"Hold" };
 
-		rightButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				detector.createFrame(rightButton, Configurations.getInstance().getProperties().keyMoveRight);
-			}
-		});
-
-		holdButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				detector.createFrame(holdButton, Configurations.getInstance().getProperties().keyHold);
-			}
-		});
-
-		JPanel p1 = new JPanel();
-		p1.setLayout(new FlowLayout(FlowLayout.CENTER));
-		p1.add(new JLabel("Left:"));
-		p1.add(leftButton);
-		panel.add(p1);
-
-		JPanel p2 = new JPanel();
-		p2.setLayout(new FlowLayout(FlowLayout.CENTER));
-		p2.add(new JLabel("Right:"));
-		p2.add(rightButton);
-		panel.add(p2);
-
-		JPanel p3 = new JPanel();
-		p3.setLayout(new FlowLayout(FlowLayout.CENTER));
-		p3.add(new JLabel("Hold:"));
-		p3.add(holdButton);
-		panel.add(p3);
-
+		for (int i = 0; i < buttons.length; i++) {
+			buttons[i] = new JButton();
+			JButton btn = buttons[i];
+			KeyBind key = configKeys[i];
+			btn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					detector.createFrame(btn, key);
+				}
+			});
+			btn.setPreferredSize(new Dimension(100, 50));
+			panel.add(new JLabel(titles[i], SwingConstants.CENTER));
+			panel.add(btn);
+		}
 		add(panel);
+		pack();
 
 		setVisible(true);
 		setLocationRelativeTo(null);
-		
+
 		updateText();
 	}
 
 	public void updateText() {
-		leftButton.setText(Configurations.getInstance().getProperties().keyMoveLeft.getText());
-		rightButton.setText(Configurations.getInstance().getProperties().keyMoveRight.getText());
-		holdButton.setText(Configurations.getInstance().getProperties().keyHold.getText());
-		
-		System.out.println(Configurations.getInstance().getProperties());
+		for (int i = 0; i < buttons.length; i++) {
+			buttons[i].setText(configKeys[i].getText());
+		}
+		revalidate();
 	}
 }
