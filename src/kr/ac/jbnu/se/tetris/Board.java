@@ -521,7 +521,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	protected void gameKeyPressed(KeyEvent e) {
 		int keycode = e.getKeyCode();
 
-		if (keycode == KeyEvent.VK_P) {
+		ConfigurationProperties configKey = Configurations.getInstance().getProperties();
+
+		if (keycode == configKey.keyPaused.getCode()) {
 			pause(true);
 			return;
 		}
@@ -548,39 +550,26 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		if (isPaused)
 			return;
 
-		switch (keycode) {
-		case KeyEvent.VK_LEFT:
+		if(keycode == configKey.keyMoveLeft.getCode())
 			tryMoveOrFail(curPiece, curX - 1, curY);
-			break;
-		case KeyEvent.VK_RIGHT:
+		
+		if(keycode == configKey.keyMoveRight.getCode())
 			tryMoveOrFail(curPiece, curX + 1, curY);
-			break;
-		case KeyEvent.VK_DOWN:
-			tryMoveOrFail(curPiece.rotateRight(), curX, curY);
-			break;
-		case KeyEvent.VK_UP:
-			tryMoveOrFail(curPiece.rotateLeft(), curX, curY);
-			break;
-		case KeyEvent.VK_SPACE:
-			dropDown();
-			break;
-		case KeyEvent.VK_D:
-			oneLineDown();
-			break;
-		case KeyEvent.VK_H:
-			holdCurrentPiece();
-			break;
-		case KeyEvent.VK_1:
-			bgm.changePrev();
-			break;
-		case KeyEvent.VK_2:
-			bgm.changeNext();
-			break;
-		case KeyEvent.VK_3:
-			gameClear();
-			break;
-		}
 
+		if(keycode == configKey.keyRotateRight.getCode())
+			tryMoveOrFail(curPiece.rotateRight(), curX, curY);
+
+		if(keycode == configKey.keyRotateLeft.getCode())
+			tryMoveOrFail(curPiece.rotateLeft(), curX, curY);
+
+		if(keycode == configKey.keyDrop.getCode())
+			dropDown();
+		
+		if(keycode == configKey.keyMoveDown.getCode())
+			oneLineDown();
+
+		if(keycode == configKey.keyHold.getCode())
+			holdCurrentPiece();
 	}
 
 	class TAdapter extends KeyAdapter {

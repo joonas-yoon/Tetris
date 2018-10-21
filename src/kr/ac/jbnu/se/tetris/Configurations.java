@@ -1,18 +1,9 @@
 package kr.ac.jbnu.se.tetris;
 
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -37,13 +28,13 @@ public class Configurations extends JFrame {
 
 	private JButton volumeMusicUpButton;
 
-	private JLabel volumeMusicText = new JLabel();
+	private JLabel volumeMusicText = new JLabel("<music: load..>");
 
 	private JButton volumeEffectDownButton;
 
 	private JButton volumeEffectUpButton;
 
-	private JLabel volumeEffectText = new JLabel();
+	private JLabel volumeEffectText = new JLabel("<effect: load..>");
 
 	private Configurations() {
 		panel = new JPanel();
@@ -144,6 +135,8 @@ public class Configurations extends JFrame {
 		setLocationRelativeTo(null);
 		setContentPane(panel);
 		setVisible(true);
+		
+		update();
 	}
 
 	public void closeFrame() {
@@ -159,15 +152,7 @@ public class Configurations extends JFrame {
 	}
 
 	synchronized public void save() {
-		try {
-			FileOutputStream fos = new FileOutputStream(ConfigurationProperties.FILENAME);
-			BufferedOutputStream bos = new BufferedOutputStream(fos);
-			ObjectOutputStream oos = new ObjectOutputStream(bos);
-			oos.writeObject(properties);
-			oos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		SerializationDemonstrator.serialize(properties, ConfigurationProperties.FILENAME);
 
 		loaded = false;
 	}
@@ -179,15 +164,11 @@ public class Configurations extends JFrame {
 		File f = new File(ConfigurationProperties.FILENAME);
 		if (f.isFile() == false)
 			return;
-
 		try {
-			FileInputStream fis = new FileInputStream(ConfigurationProperties.FILENAME);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			ObjectInputStream ois = new ObjectInputStream(bis);
-			properties = (ConfigurationProperties) ois.readObject();
-			ois.close();
-		} catch (Exception e) {
+			properties = SerializationDemonstrator.deserialize(ConfigurationProperties.FILENAME, ConfigurationProperties.class);
+		} catch(Exception e){
 			e.printStackTrace();
+			return;
 		}
 
 		update();
