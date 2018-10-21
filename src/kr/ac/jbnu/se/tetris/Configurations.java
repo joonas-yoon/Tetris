@@ -23,8 +23,6 @@ public class Configurations extends JFrame {
 
 	private static transient Configurations instance = new Configurations();
 
-	public static String FILENAME = "configs.dat";
-
 	private ConfigurationProperties properties = new ConfigurationProperties();
 
 	private boolean loaded = false;
@@ -162,13 +160,12 @@ public class Configurations extends JFrame {
 
 	synchronized public void save() {
 		try {
-			FileOutputStream fos = new FileOutputStream(FILENAME);
+			FileOutputStream fos = new FileOutputStream(ConfigurationProperties.FILENAME);
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 			ObjectOutputStream oos = new ObjectOutputStream(bos);
 			oos.writeObject(properties);
 			oos.close();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 
@@ -179,18 +176,17 @@ public class Configurations extends JFrame {
 		if (isLoaded())
 			return;
 
-		File f = new File(FILENAME);
+		File f = new File(ConfigurationProperties.FILENAME);
 		if (f.isFile() == false)
 			return;
 
 		try {
-			FileInputStream fis = new FileInputStream(FILENAME);
+			FileInputStream fis = new FileInputStream(ConfigurationProperties.FILENAME);
 			BufferedInputStream bis = new BufferedInputStream(fis);
 			ObjectInputStream ois = new ObjectInputStream(bis);
 			properties = (ConfigurationProperties) ois.readObject();
 			ois.close();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 

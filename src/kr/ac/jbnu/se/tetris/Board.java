@@ -73,6 +73,14 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			}
 		}, observeDelay, observePeriod);
 
+		// scheduled long term
+		new java.util.Timer().schedule(new java.util.TimerTask() {
+			@Override
+			public void run() {
+				updateConfigurations();
+			}
+		}, 5000, 5000);
+
 		this.parent = parent;
 
 		ready();
@@ -89,6 +97,11 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			comboOpacity -= 5;
 			repaint();
 		}
+	}
+	
+	protected void updateConfigurations(){
+		bgm.setVolume(Configurations.getInstance().getProperties().getVolumeMusic());
+		sound.setVolume(Configurations.getInstance().getProperties().getVolumeEffect());
 	}
 
 	public void setGameSpeed(int level) {

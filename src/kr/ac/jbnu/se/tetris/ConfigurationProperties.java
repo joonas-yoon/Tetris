@@ -6,6 +6,8 @@ import java.io.Serializable;
 public class ConfigurationProperties implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	public static String FILENAME = "configs.dat";
 
 	int volumeMusic = SoundPlayer.MAX_VOLUME;
 	int volumeEffect = SoundPlayer.MAX_VOLUME;
