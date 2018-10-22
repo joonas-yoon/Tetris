@@ -53,8 +53,4 @@ public class KeyBind implements Serializable {
 	private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
 		this.keyCode = in.readInt();
 	}
-
-	private void readObjectNoData() throws ObjectStreamException {
-		throw new InvalidObjectException("Stream data required");
-	}
 }

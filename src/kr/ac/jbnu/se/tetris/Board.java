@@ -346,6 +346,7 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 		if (isGameOvered) {
 			texts.add("GAME OVER");
+			texts.add("(press ENTER)");
 		} else if (isGameCleared) {
 			texts.add("CLEAR!");
 			texts.add("(press ENTER)");

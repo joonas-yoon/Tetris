@@ -7,7 +7,7 @@ public class ConfigurationProperties implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static String FILENAME = "configs.dat";
+	public transient static String FILENAME = "configs.dat";
 
 	int volumeMusic = SoundPlayer.MAX_VOLUME;
 	int volumeEffect = SoundPlayer.MAX_VOLUME;
@@ -22,24 +22,25 @@ public class ConfigurationProperties implements Serializable {
 	KeyBind keyDrop = new KeyBind(KeyEvent.VK_SPACE);
 	KeyBind keyHold = new KeyBind(KeyEvent.VK_H);
 
-	public static final int KEY_BINDING_COUNT = 8;
+	public transient static final int KEY_BINDING_COUNT = 8;
 
 	public ConfigurationProperties() {
 
 	}
 
 	public String toString() {
-		String ret = "[";
-		ret += volumeMusic + ",";
-		ret += volumeEffect + ",";
-		ret += keyMoveLeft.getText() + ",";
-		ret += keyMoveRight.getText() + ",";
-		ret += keyMoveDown.getText() + ",";
-		ret += keyRotateLeft.getText() + ",";
-		ret += keyRotateRight.getText() + ",";
-		ret += keyPaused.getText() + ",";
-		ret += keyDrop.getText() + ",";
-		ret += "]";
+		String ret = "{";
+		ret += "volumeMusic: " + volumeMusic + ",";
+		ret += "volumeEffect: " + volumeEffect + ",";
+		ret += "keyMoveLeft: " + keyMoveLeft.getText() + ",";
+		ret += "keyMoveRight: " + keyMoveRight.getText() + ",";
+		ret += "keyMoveDown: " + keyMoveDown.getText() + ",";
+		ret += "keyRotateLeft: " + keyRotateLeft.getText() + ",";
+		ret += "keyRotateRight: " + keyRotateRight.getText() + ",";
+		ret += "keyPaused: " + keyPaused.getText() + ",";
+		ret += "keyDrop: " + keyDrop.getText() + ",";
+		ret += "keyHold: " + keyHold.getText();
+		ret += "}";
 		return ret;
 	}
 
