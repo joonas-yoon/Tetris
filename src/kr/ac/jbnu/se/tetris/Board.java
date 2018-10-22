@@ -265,6 +265,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		refreshText();
 		bgm.stop();
 		sound.play("sounds/gameover.wav", 0);
+
+		registRank();
 	}
 
 	protected void gameClear() {
@@ -272,6 +274,16 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		isPaused = isGameCleared = true;
 		refreshText();
 		bgm.stop();
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Ranking
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	protected void registRank() {
+		Ranking.getInstance().requestSubmitScore(score);
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////

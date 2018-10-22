@@ -134,7 +134,8 @@ public class StartScreen extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//
+				Ranking.getInstance().load();
+				Ranking.getInstance().showRanking();
 			}
 		});
 
