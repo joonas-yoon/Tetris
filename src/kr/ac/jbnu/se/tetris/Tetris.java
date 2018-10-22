@@ -28,15 +28,15 @@ public class Tetris extends JFrame {
 
 	BlockPreviewer[] nextBlocksPreview;
 	BlockPreviewer holdBlockPreview;
-	
+
 	StartScreen parent;
 	Board board;
 
 	public Tetris(StartScreen parent) {
 		this.parent = parent;
 	}
-	
-	public void createFrame(boolean isStageMode){
+
+	public void createFrame(boolean isStageMode) {
 		statusbar = new JLabel(" 0");
 		statusbar.setForeground(Color.WHITE);
 
@@ -45,7 +45,7 @@ public class Tetris extends JFrame {
 		scoreText.setForeground(Color.WHITE);
 		scoreText.setOpaque(true);
 
-		if(isStageMode){
+		if (isStageMode) {
 			board = new BoardStages(this);
 		} else {
 			board = new Board(this);
@@ -110,11 +110,11 @@ public class Tetris extends JFrame {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 	}
-	
+
 	@Override
 	public void dispose() {
 		parent.createFrame();
-		if(board != null){
+		if (board != null) {
 			board.quit();
 		}
 		super.dispose();

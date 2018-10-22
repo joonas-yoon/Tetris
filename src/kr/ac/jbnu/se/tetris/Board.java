@@ -98,8 +98,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			repaint();
 		}
 	}
-	
-	protected void updateConfigurations(){
+
+	protected void updateConfigurations() {
 		bgm.setVolume(Configurations.getInstance().getProperties().getVolumeMusic());
 		sound.setVolume(Configurations.getInstance().getProperties().getVolumeEffect());
 	}
@@ -140,8 +140,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		for (int i = 0; i < BoardHeight * BoardWidth; ++i)
 			board[i] = Tetrominoes.NoShape;
 	}
-	
-	protected void quit(){
+
+	protected void quit() {
 		gameTimer.stop();
 	}
 
@@ -550,25 +550,25 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		if (isPaused)
 			return;
 
-		if(keycode == configKey.keyMoveLeft.getCode())
+		if (keycode == configKey.keyMoveLeft.getCode())
 			tryMoveOrFail(curPiece, curX - 1, curY);
-		
-		if(keycode == configKey.keyMoveRight.getCode())
+
+		if (keycode == configKey.keyMoveRight.getCode())
 			tryMoveOrFail(curPiece, curX + 1, curY);
 
-		if(keycode == configKey.keyRotateRight.getCode())
+		if (keycode == configKey.keyRotateRight.getCode())
 			tryMoveOrFail(curPiece.rotateRight(), curX, curY);
 
-		if(keycode == configKey.keyRotateLeft.getCode())
+		if (keycode == configKey.keyRotateLeft.getCode())
 			tryMoveOrFail(curPiece.rotateLeft(), curX, curY);
 
-		if(keycode == configKey.keyDrop.getCode())
+		if (keycode == configKey.keyDrop.getCode())
 			dropDown();
-		
-		if(keycode == configKey.keyMoveDown.getCode())
+
+		if (keycode == configKey.keyMoveDown.getCode())
 			oneLineDown();
 
-		if(keycode == configKey.keyHold.getCode())
+		if (keycode == configKey.keyHold.getCode())
 			holdCurrentPiece();
 	}
 

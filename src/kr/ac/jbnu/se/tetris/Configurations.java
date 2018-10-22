@@ -97,7 +97,7 @@ public class Configurations extends JFrame {
 				save();
 			}
 		});
-		
+
 		bgmSelectPrevButton = new JButton("<<");
 		bgmSelectNextButton = new JButton(">>");
 		bgmSelectPrevButton.addActionListener(new ActionListener() {
@@ -167,7 +167,7 @@ public class Configurations extends JFrame {
 		setLocationRelativeTo(null);
 		setContentPane(panel);
 		setVisible(true);
-		
+
 		update();
 	}
 
@@ -198,8 +198,9 @@ public class Configurations extends JFrame {
 		if (f.isFile() == false)
 			return;
 		try {
-			properties = SerializationDemonstrator.deserialize(ConfigurationProperties.FILENAME, ConfigurationProperties.class);
-		} catch(Exception e){
+			properties = SerializationDemonstrator.deserialize(ConfigurationProperties.FILENAME,
+					ConfigurationProperties.class);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return;
 		}

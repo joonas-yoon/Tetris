@@ -30,14 +30,14 @@ public class StartScreen extends JFrame {
 	JButton rankingButton;
 	JLabel title;
 	GridBagConstraints gbc = new GridBagConstraints();
-	
+
 	ImageIcon settingsOrgIcon = new ImageIcon("images/icons/settings.png");
 	ImageIcon rankingOrgIcon = new ImageIcon("images/icons/ranking.png");
 	Image settingsOrg = settingsOrgIcon.getImage();
 	Image rankingOrg = rankingOrgIcon.getImage();
 	Image settingsImg = settingsOrg.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 	Image rankingImg = rankingOrg.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-	
+
 	Tetris game;
 
 	int width = 360;
@@ -49,7 +49,7 @@ public class StartScreen extends JFrame {
 		game = new Tetris(this);
 
 		BGM.getInstance().play();
-		
+
 		try {
 			backgroundImage = ImageIO.read(new File("images/intro.png"));
 			width = backgroundImage.getWidth();
@@ -58,39 +58,38 @@ public class StartScreen extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		panel = new JPanel(){
+
+		panel = new JPanel() {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				g.drawImage(backgroundImage, 0, 0, this);
 			}
 		};
 		panel.setLayout(new GridBagLayout());
-		
+
 		gbc.insets = new Insets(30, -20, 30, -20);
-		
+
 		title = new JLabel("TETRIS");
 		gbc.gridx = 2;
 		gbc.gridy = 0;
 		title.setFont(new Font("Consolas", Font.BOLD, 50));
 		title.setForeground(Color.BLACK);
 		panel.add(title, gbc);
-		
-		
+
 		classicModeButton = new JButton("Classic Mode");
 		gbc.gridx = 1;
 		gbc.gridy = 3;
 		classicModeButton.setFocusPainted(false);
 		panel.add(classicModeButton, gbc);
-		
+
 		stageModeButton = new JButton("Stage Mode");
 		gbc.gridx = 3;
 		gbc.gridy = 3;
 		stageModeButton.setFocusPainted(false);
 		panel.add(stageModeButton, gbc);
-		
+
 		gbc.insets = new Insets(50, 0, 30, 0);
-		
+
 		settingButton = new JButton(new ImageIcon(settingsImg));
 		gbc.gridx = 1;
 		gbc.gridy = 5;
@@ -98,7 +97,7 @@ public class StartScreen extends JFrame {
 		settingButton.setContentAreaFilled(false);
 		settingButton.setFocusPainted(false);
 		panel.add(settingButton, gbc);
-		
+
 		rankingButton = new JButton(new ImageIcon(rankingImg));
 		gbc.gridx = 3;
 		gbc.gridy = 5;
@@ -106,33 +105,33 @@ public class StartScreen extends JFrame {
 		rankingButton.setContentAreaFilled(false);
 		rankingButton.setFocusPainted(false);
 		panel.add(rankingButton, gbc);
-		
+
 		classicModeButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				startGame(false);
 			}
 		});
-		
+
 		stageModeButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				startGame(true);
 			}
 		});
-		
+
 		settingButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Configurations.getInstance().createFrame();
 			}
 		});
-		
+
 		rankingButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//

@@ -7,7 +7,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 public class TetrisGridPanel extends JPanel {
-	
+
 	public static Color BLOCK_COLORS[] = { new Color(0, 0, 0), new Color(204, 102, 102), new Color(102, 204, 102),
 			new Color(102, 102, 204), new Color(204, 204, 102), new Color(204, 102, 204), new Color(102, 204, 204),
 			new Color(218, 170, 0), new Color(128, 128, 128) };

@@ -8,7 +8,8 @@ public class BGM extends SoundPlayer {
 
 	private static String[] musicList = { "bgm.wav", "bgm0.wav", "bgm1.wav", "bgm2.wav", "bgm3.wav" };
 
-	public static String[] musicTitle = { "8 Bit Fun! by HeatleyBros", "TETRIS by Famicom", "Legend Of Zelda Theme", "Hearthstone", "Still More Fighting by Final Fantasy VII" };
+	public static String[] musicTitle = { "8 Bit Fun! by HeatleyBros", "TETRIS by Famicom", "Legend Of Zelda Theme",
+			"Hearthstone", "Still More Fighting by Final Fantasy VII" };
 
 	public String defaultDirectory = "sounds";
 
@@ -52,8 +53,8 @@ public class BGM extends SoundPlayer {
 	public void changePrev() {
 		change(currentId - 1);
 	}
-	
-	public String getCurrentTitle(){
+
+	public String getCurrentTitle() {
 		return musicTitle[currentId];
 	}
 }
