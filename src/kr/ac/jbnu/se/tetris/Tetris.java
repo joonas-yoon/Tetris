@@ -15,14 +15,13 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 public class Tetris extends JFrame {
-
 	Configurations configs = Configurations.getInstance();
 
 	JLabel statusbar;
 	JLabel scoreText;
 	BGM bgm = BGM.getInstance();
 
-	final int VIEWPORT_PADDING = 30;
+	static final int VIEWPORT_PADDING = 30;
 	int VIEWPORT_WIDTH = 600;
 	int VIEWPORT_HEIGHT = 800;
 
@@ -129,8 +128,9 @@ public class Tetris extends JFrame {
 	}
 
 	public void updateNextBlocks(BlockFactory nextBlocks) {
-		if (nextBlocksPreview == null)
+		if (nextBlocksPreview == null) {
 			return;
+		}
 
 		int nextBlockCount = nextBlocks.getSize();
 		for (int i = 0; i < nextBlockCount; ++i) {

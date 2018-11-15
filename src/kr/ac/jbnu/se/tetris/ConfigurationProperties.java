@@ -4,14 +4,13 @@ import java.awt.event.KeyEvent;
 import java.io.Serializable;
 
 public class ConfigurationProperties implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 
-	public transient static String FILENAME = "configs.dat";
+	public static transient String FILENAME = "configs.dat";
 
 	int volumeMusic = SoundPlayer.MAX_VOLUME;
 	int volumeEffect = SoundPlayer.MAX_VOLUME;
-	int bgmId = 0;
+	int bgmId;
 
 	KeyBind keyMoveLeft = new KeyBind(KeyEvent.VK_LEFT);
 	KeyBind keyMoveRight = new KeyBind(KeyEvent.VK_RIGHT);
@@ -22,11 +21,7 @@ public class ConfigurationProperties implements Serializable {
 	KeyBind keyDrop = new KeyBind(KeyEvent.VK_SPACE);
 	KeyBind keyHold = new KeyBind(KeyEvent.VK_H);
 
-	public transient static final int KEY_BINDING_COUNT = 8;
-
-	public ConfigurationProperties() {
-
-	}
+	public static final transient int KEY_BINDING_COUNT = 8;
 
 	public String toString() {
 		String ret = "{";

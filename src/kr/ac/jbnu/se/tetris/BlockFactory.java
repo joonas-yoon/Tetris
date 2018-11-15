@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BlockFactory {
-
 	private int goalSize = 5;
-	private ArrayList<Shape> queue = new ArrayList<Shape>();
+	private ArrayList<Shape> queue = new ArrayList<>();
 
 	public BlockFactory(int size) {
 		fill(size);
@@ -16,14 +15,16 @@ public class BlockFactory {
 		Shape shape = new Shape();
 		shape.setRandomShape();
 		int rotateCount = new Random().nextInt(4);
-		while (rotateCount-- > 0)
+		while (rotateCount-- > 0) {
 			shape = shape.rotateLeft();
+		}
 		return shape;
 	}
 
 	public Shape getBlock(int idx) {
-		if (queue.isEmpty() || idx < 0 || idx >= queue.size())
+		if (queue.isEmpty() || idx < 0 || idx >= queue.size()) {
 			return null;
+		}
 		return queue.get(idx);
 	}
 

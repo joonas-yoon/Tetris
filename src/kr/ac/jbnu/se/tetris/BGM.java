@@ -3,7 +3,6 @@ package kr.ac.jbnu.se.tetris;
 import javax.sound.sampled.Clip;
 
 public class BGM extends SoundPlayer {
-
 	private static BGM instance = new BGM();
 
 	private static String[] musicList = { "bgm.wav", "bgm0.wav", "bgm1.wav", "bgm2.wav", "bgm3.wav" };
@@ -13,10 +12,9 @@ public class BGM extends SoundPlayer {
 
 	public String defaultDirectory = "sounds";
 
-	private int currentId = 0;
+	private int currentId;
 
 	private BGM() {
-
 	}
 
 	public static BGM getInstance() {

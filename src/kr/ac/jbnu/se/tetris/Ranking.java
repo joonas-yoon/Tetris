@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class Ranking extends JFrame {
-
 	private static transient Ranking instance = new Ranking();
 
 	private RankingList list;
@@ -48,7 +47,6 @@ public class Ranking extends JFrame {
 	}
 
 	class SubmitPanel extends JPanel {
-
 		public SubmitPanel(long score) {
 			panel.removeAll();
 
@@ -134,7 +132,6 @@ public class Ranking extends JFrame {
 		setSize(300, 200);
 		setLocationRelativeTo(null);
 		setVisible(true);
-		
 		load();
 
 		new SubmitPanel(score);
@@ -142,22 +139,24 @@ public class Ranking extends JFrame {
 
 	public void closeFrame() {
 		setVisible(false);
-		this.dispose();
+		dispose();
 	}
 
-	synchronized public void save() {
+	public synchronized void save() {
 		SerializationDemonstrator.serialize(getInstance().list, RankingList.FILENAME);
 
 		loaded = false;
 	}
 
-	synchronized public void load() {
-		if (isLoaded())
+	public synchronized void load() {
+		if (isLoaded()) {
 			return;
+		}
 
 		File f = new File(RankingList.FILENAME);
-		if (f.isFile() == false)
+		if (!f.isFile()) {
 			return;
+		}
 
 		try {
 			getInstance().list = SerializationDemonstrator.deserialize(RankingList.FILENAME, RankingList.class);

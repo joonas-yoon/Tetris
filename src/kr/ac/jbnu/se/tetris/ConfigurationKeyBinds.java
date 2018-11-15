@@ -14,11 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 public class ConfigurationKeyBinds extends JFrame {
-
-	public int selectedKeyCode;
-
 	private class Detector extends JFrame implements KeyListener {
-
 		JPanel panel = new JPanel();
 		JLabel infoText = new JLabel("Press Any Key");
 		JButton button;
@@ -67,19 +63,15 @@ public class ConfigurationKeyBinds extends JFrame {
 
 			key.set(keyCode);
 			button.setText(key.getText());
-			this.dispose();
+			dispose();
 		}
 
 		@Override
 		public void keyReleased(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void keyTyped(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-
 		}
 	}
 

@@ -15,20 +15,19 @@ import javax.swing.JLabel;
 import javax.swing.Timer;
 
 public class Board extends TetrisGridPanel implements ActionListener {
-
 	Tetris parent;
 
 	Timer gameTimer;
 
-	boolean isFallingFinished = false;
-	boolean isStarted = false;
-	boolean isPaused = false;
-	boolean isGameOvered = false;
-	boolean isGameCleared = false;
+	boolean isFallingFinished;
+	boolean isStarted;
+	boolean isPaused;
+	boolean isGameOvered;
+	boolean isGameCleared;
 
-	int numLinesRemoved = 0;
-	int curX = 0;
-	int curY = 0;
+	int numLinesRemoved;
+	int curX;
+	int curY;
 	JLabel statusbar;
 	Shape curPiece;
 	Tetrominoes[] board;
@@ -40,14 +39,14 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 	Color comboFontColor = Color.BLACK;
 	int comboOpacity = 100;
-	int comboCount = 0;
+	int comboCount;
 
 	int gameSpeedLevel = 1;
 	int[] gameSpeedDelay = { 400, 300, 200, 150, 100, 75, 50 };
 
 	Shape holdPiece;
 
-	long score = 0;
+	long score;
 	JLabel scoreText;
 
 	public Board(Tetris parent) {
@@ -137,8 +136,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	}
 
 	protected void clearBoard() {
-		for (int i = 0; i < BoardHeight * BoardWidth; ++i)
+		for (int i = 0; i < BoardHeight * BoardWidth; ++i) {
 			board[i] = Tetrominoes.NoShape;
+		}
 	}
 
 	protected void quit() {
@@ -152,10 +152,11 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	protected void refreshText() {
-		if (isPaused)
+		if (isPaused) {
 			statusbar.setText("paused");
-		else if (isStarted)
-			statusbar.setText(String.valueOf("(level: " + gameSpeedLevel + ") score: " + score));
+		} else if (isStarted) {
+			statusbar.setText("(level: " + gameSpeedLevel + ") score: " + score);
+		}
 		scoreText.setText("SCORE: " + score);
 	}
 
@@ -224,26 +225,30 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	}
 
 	public void start() {
-		if (isPaused)
+		if (isPaused) {
 			return;
+		}
 
 		isStarted = true;
 		isFallingFinished = false;
 
 		newPiece();
-		if (!bgm.isPlaying)
+		if (!bgm.isPlaying) {
 			bgm.play();
+		}
 		gameTimer.start();
 	}
 
 	private void pause(boolean toggle) {
-		if (!isStarted)
+		if (!isStarted) {
 			return;
+		}
 
-		if (toggle)
+		if (toggle) {
 			isPaused = !isPaused;
-		else
+		} else {
 			isPaused = true;
+		}
 
 		if (isPaused) {
 			bgm.pause();
@@ -303,19 +308,18 @@ public class Board extends TetrisGridPanel implements ActionListener {
 				Tetrominoes shape = shapeAt(j, BoardHeight - i - 1);
 				int x = j * squareWidth();
 				int y = boardTop + i * squareHeight();
-				if (shape != Tetrominoes.NoShape)
+				if (shape != Tetrominoes.NoShape) {
 					drawRect(g, x, y, shape, false);
-				else
+				} else {
 					drawRect(g, x, y, new Color(254, 254, 254, 50));
+				}
 			}
 		}
 
 		if (isPaused || !isStarted) {
 			drawTitleText(g);
-		} else {
-			if (curPiece.getShape() != Tetrominoes.NoShape) {
-				drawShape(g, curX, curY, curPiece, false);
-			}
+		} else if (curPiece.getShape() != Tetrominoes.NoShape) {
+			drawShape(g, curX, curY, curPiece, false);
 		}
 
 		preview(g);
@@ -372,8 +376,8 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			Font font = new Font("Comic Sans MS", Font.BOLD, fontSize);
 			g2d.setFont(font);
 			FontMetrics fm = g2d.getFontMetrics();
-			int x = ((getWidth() - fm.stringWidth(text)) / 2);
-			int y = ((getHeight() - fm.getHeight()) / 2) + fm.getAscent();
+			int x = (getWidth() - fm.stringWidth(text)) / 2;
+			int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
 			g2d.setColor(fontColor);
 			g2d.drawString(text, x + offsetX, y + offsetY);
 			g2d.dispose();
@@ -384,8 +388,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	}
 
 	private void preview(Graphics g) {
-		if (!isStarted || isPaused || isFallingFinished)
+		if (!isStarted || isPaused || isFallingFinished) {
 			return;
+		}
 
 		int bottomPredict = getYPosPredict(curPiece, curX, curY);
 		drawShape(g, curX, bottomPredict, curPiece, true);
@@ -400,16 +405,18 @@ public class Board extends TetrisGridPanel implements ActionListener {
 	private void dropDown() {
 		int newY = curY;
 		while (newY > 0) {
-			if (!tryMoveOrFail(curPiece, curX, newY - 1))
+			if (!tryMoveOrFail(curPiece, curX, newY - 1)) {
 				break;
+			}
 			--newY;
 		}
 		pieceDropped();
 	}
 
 	private void oneLineDown() {
-		if (!tryMoveOrFail(curPiece, curX, curY - 1))
+		if (!tryMoveOrFail(curPiece, curX, curY - 1)) {
 			pieceDropped();
+		}
 	}
 
 	private void pieceDropped() {
@@ -423,8 +430,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 
 		sound.play("sounds/beep0.wav", 1);
 
-		if (!isFallingFinished)
+		if (!isFallingFinished) {
 			newPiece();
+		}
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -445,18 +453,18 @@ public class Board extends TetrisGridPanel implements ActionListener {
 		curX = BoardWidth / 2 + 1;
 		curY = BoardHeight - 1 + curPiece.minY();
 
-		if (!tryMoveOrFail(curPiece, curX, curY))
+		if (!tryMoveOrFail(curPiece, curX, curY)) {
 			gameover();
+		}
 	}
 
 	private boolean isMovableDownward(Shape newPiece, int newX, int newY) {
 		for (int i = 0; i < 4; ++i) {
 			int x = newX + newPiece.x(i);
 			int y = newY - newPiece.y(i);
-			if (x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight)
+			if (x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight || shapeAt(x, y) != Tetrominoes.NoShape) {
 				return false;
-			if (shapeAt(x, y) != Tetrominoes.NoShape)
-				return false;
+			}
 		}
 		return true;
 	}
@@ -497,8 +505,9 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			if (lineIsFull) {
 				++numFullLines;
 				for (int k = i; k < BoardHeight - 1; ++k) {
-					for (int j = 0; j < BoardWidth; ++j)
-						board[(k * BoardWidth) + j] = shapeAt(j, k + 1);
+					for (int j = 0; j < BoardWidth; ++j) {
+						board[k * BoardWidth + j] = shapeAt(j, k + 1);
+					}
 				}
 			}
 		}
@@ -560,29 +569,37 @@ public class Board extends TetrisGridPanel implements ActionListener {
 			return;
 		}
 
-		if (isPaused)
+		if (isPaused) {
 			return;
+		}
 
-		if (keycode == configKey.keyMoveLeft.getCode())
+		if (keycode == configKey.keyMoveLeft.getCode()) {
 			tryMoveOrFail(curPiece, curX - 1, curY);
+		}
 
-		if (keycode == configKey.keyMoveRight.getCode())
+		if (keycode == configKey.keyMoveRight.getCode()) {
 			tryMoveOrFail(curPiece, curX + 1, curY);
+		}
 
-		if (keycode == configKey.keyRotateRight.getCode())
+		if (keycode == configKey.keyRotateRight.getCode()) {
 			tryMoveOrFail(curPiece.rotateRight(), curX, curY);
+		}
 
-		if (keycode == configKey.keyRotateLeft.getCode())
+		if (keycode == configKey.keyRotateLeft.getCode()) {
 			tryMoveOrFail(curPiece.rotateLeft(), curX, curY);
+		}
 
-		if (keycode == configKey.keyDrop.getCode())
+		if (keycode == configKey.keyDrop.getCode()) {
 			dropDown();
+		}
 
-		if (keycode == configKey.keyMoveDown.getCode())
+		if (keycode == configKey.keyMoveDown.getCode()) {
 			oneLineDown();
+		}
 
-		if (keycode == configKey.keyHold.getCode())
+		if (keycode == configKey.keyHold.getCode()) {
 			holdCurrentPiece();
+		}
 	}
 
 	class TAdapter extends KeyAdapter {

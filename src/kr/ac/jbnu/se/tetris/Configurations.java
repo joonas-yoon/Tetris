@@ -11,12 +11,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Configurations extends JFrame {
-
 	private static transient Configurations instance = new Configurations();
 
 	private ConfigurationProperties properties = new ConfigurationProperties();
 
-	private boolean loaded = false;
+	private boolean loaded;
 
 	private JPanel panel;
 
@@ -154,8 +153,9 @@ public class Configurations extends JFrame {
 	}
 
 	public ConfigurationProperties getProperties() {
-		if (!loaded)
+		if (!loaded) {
 			load();
+		}
 		return properties;
 	}
 
@@ -173,7 +173,7 @@ public class Configurations extends JFrame {
 
 	public void closeFrame() {
 		setVisible(false);
-		this.dispose();
+		dispose();
 	}
 
 	public void update() {
@@ -184,19 +184,21 @@ public class Configurations extends JFrame {
 		}
 	}
 
-	synchronized public void save() {
+	public synchronized void save() {
 		SerializationDemonstrator.serialize(properties, ConfigurationProperties.FILENAME);
 
 		loaded = false;
 	}
 
-	synchronized public void load() {
-		if (isLoaded())
+	public synchronized void load() {
+		if (isLoaded()) {
 			return;
+		}
 
 		File f = new File(ConfigurationProperties.FILENAME);
-		if (f.isFile() == false)
+		if (!f.isFile()) {
 			return;
+		}
 		try {
 			properties = SerializationDemonstrator.deserialize(ConfigurationProperties.FILENAME,
 					ConfigurationProperties.class);

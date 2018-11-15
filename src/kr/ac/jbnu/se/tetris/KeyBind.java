@@ -9,7 +9,6 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 
 public class KeyBind implements Serializable {
-
 	private int keyCode;
 
 	public KeyBind(int newKeyCode) {

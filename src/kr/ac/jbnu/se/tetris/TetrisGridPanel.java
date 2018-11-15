@@ -7,7 +7,6 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 public class TetrisGridPanel extends JPanel {
-
 	public static Color BLOCK_COLORS[] = { new Color(0, 0, 0), new Color(204, 102, 102), new Color(102, 204, 102),
 			new Color(102, 102, 204), new Color(204, 204, 102), new Color(204, 102, 204), new Color(102, 204, 204),
 			new Color(218, 170, 0), new Color(128, 128, 128) };
@@ -26,10 +25,6 @@ public class TetrisGridPanel extends JPanel {
 
 	int squareHeight() {
 		return (int) getSize().getHeight() / BoardHeight;
-	}
-
-	public void paint(Graphics g) {
-		super.paint(g);
 	}
 
 	void drawRect(Graphics g, int x, int y, Color color) {

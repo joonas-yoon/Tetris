@@ -22,7 +22,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class StartScreen extends JFrame {
-
 	JPanel panel;
 	JButton classicModeButton;
 	JButton stageModeButton;
@@ -55,7 +54,6 @@ public class StartScreen extends JFrame {
 			width = backgroundImage.getWidth();
 			height = backgroundImage.getHeight();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

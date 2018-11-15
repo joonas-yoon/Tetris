@@ -53,7 +53,7 @@ public class BlockPreviewer extends TetrisGridPanel {
 		// Relies on being the only component
 		// in a layout that will center it without
 		// expanding it to fill all the space.
-		Dimension d = this.getParent().getSize();
+		Dimension d = getParent().getSize();
 		int newSize = Math.min(d.width, d.height);
 		newSize = newSize == 0 ? Math.min(squareWidth(), squareHeight()) : newSize;
 		return new Dimension(newSize, newSize);

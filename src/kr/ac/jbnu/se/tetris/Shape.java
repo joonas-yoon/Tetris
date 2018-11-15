@@ -3,7 +3,6 @@ package kr.ac.jbnu.se.tetris;
 import java.util.Random;
 
 public class Shape {
-
 	private Tetrominoes pieceShape;
 	private int coords[][];
 	private int[][][] coordsTable;
@@ -21,8 +20,10 @@ public class Shape {
 
 	public void setShape(Tetrominoes shape) {
 		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 2; ++j) {
-				coords[i][j] = coordsTable[shape.ordinal()][i][j];
+			try {
+				System.arraycopy(coordsTable[shape.ordinal()][i], 0, coords[i], 0, 2);
+			} catch (IndexOutOfBoundsException e) {
+				throw new ArrayIndexOutOfBoundsException(e.getMessage());
 			}
 		}
 
@@ -97,8 +98,9 @@ public class Shape {
 	}
 
 	public Shape rotateLeft() {
-		if (pieceShape == Tetrominoes.SquareShape)
+		if (pieceShape == Tetrominoes.SquareShape) {
 			return this;
+		}
 
 		Shape result = new Shape();
 		result.pieceShape = pieceShape;
@@ -111,8 +113,9 @@ public class Shape {
 	}
 
 	public Shape rotateRight() {
-		if (pieceShape == Tetrominoes.SquareShape)
+		if (pieceShape == Tetrominoes.SquareShape) {
 			return this;
+		}
 
 		Shape result = new Shape();
 		result.pieceShape = pieceShape;

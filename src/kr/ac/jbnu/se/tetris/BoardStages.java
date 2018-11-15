@@ -7,10 +7,9 @@ import java.awt.event.KeyEvent;
 import java.util.Random;
 
 public class BoardStages extends Board {
-
 	static final int FINAL_STAGE = 25;
-	int currentStageLevel = 0;
-	int currentStagePoint = 0;
+	int currentStageLevel;
+	int currentStagePoint;
 
 	public BoardStages(Tetris parent) {
 		super(parent);
@@ -37,8 +36,9 @@ public class BoardStages extends Board {
 			isGameCleared = false;
 		}
 
-		if (!levelUp)
+		if (!levelUp) {
 			currentStageLevel = 1;
+		}
 		currentStagePoint = 0;
 	}
 
@@ -84,9 +84,9 @@ public class BoardStages extends Board {
 	protected void refreshText() {
 		super.refreshText();
 
-		if (isStarted)
-			statusbar.setText(String
-					.valueOf("[level: " + currentStageLevel + "] (" + (int) getCurrentStageClearPercent() + "%)"));
+		if (isStarted) {
+			statusbar.setText("[level: " + currentStageLevel + "] (" + (int) getCurrentStageClearPercent() + "%)");
+		}
 	}
 
 	private void generateRandomDummyBlock(int maxBlocks, int maxHeight) {

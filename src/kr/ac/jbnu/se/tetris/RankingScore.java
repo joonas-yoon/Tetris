@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class RankingScore implements Serializable {
-
 	private String name;
 
 	private long score;
@@ -15,13 +14,12 @@ public class RankingScore implements Serializable {
 	private long time;
 
 	public RankingScore() {
-
 	}
 
 	RankingScore(String name, long score2) {
 		this.name = name;
 		this.score = score2;
-		this.time = (new Date()).getTime();
+		this.time = new Date().getTime();
 	}
 
 	public String getName() {

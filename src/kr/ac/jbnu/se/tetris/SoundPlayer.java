@@ -7,19 +7,18 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 
 public class SoundPlayer {
-	private Clip clip = null;
+	private Clip clip;
 
-	public boolean isPlaying = false;
+	public boolean isPlaying;
 
 	static int MAX_VOLUME = 10;
 	int volume = MAX_VOLUME;
 	int oldVolume;
 
 	String oldFilename = "";
-	int oldLoopCount = 0;
+	int oldLoopCount;
 
 	public SoundPlayer() {
-
 	}
 
 	public SoundPlayer(int soundVolume) {
@@ -45,16 +44,15 @@ public class SoundPlayer {
 
 			oldFilename = filename;
 			oldLoopCount = loopCount;
-
 		} catch (Exception ex) {
-			// TODO Auto-generated catch block
 			ex.printStackTrace();
 		}
 	}
 
 	public void replay() {
-		if (!isPlaying)
+		if (!isPlaying) {
 			return;
+		}
 
 		if (oldFilename != "") {
 			stop();
@@ -80,14 +78,15 @@ public class SoundPlayer {
 	}
 
 	public void pause() {
-		if (clip == null)
+		if (clip == null) {
 			return;
+		}
 
 		try {
-			if (clip.isOpen())
+			if (clip.isOpen()) {
 				clip.stop();
+			}
 		} catch (Exception ex) {
-			// TODO Auto-generated catch block
 			ex.printStackTrace();
 		} finally {
 			isPlaying = false;
@@ -95,14 +94,15 @@ public class SoundPlayer {
 	}
 
 	public void resume() {
-		if (clip == null)
+		if (clip == null) {
 			return;
+		}
 
 		try {
-			if (clip.isOpen())
+			if (clip.isOpen()) {
 				clip.start();
+			}
 		} catch (Exception ex) {
-			// TODO Auto-generated catch block
 			ex.printStackTrace();
 		} finally {
 			isPlaying = true;
@@ -110,14 +110,14 @@ public class SoundPlayer {
 	}
 
 	public void stop() {
-		if (clip == null)
+		if (clip == null) {
 			return;
+		}
 
 		try {
 			clip.stop();
 			clip.close();
 		} catch (Exception ex) {
-			// TODO Auto-generated catch block
 			ex.printStackTrace();
 		} finally {
 			isPlaying = false;

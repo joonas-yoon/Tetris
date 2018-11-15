@@ -7,16 +7,11 @@ import java.util.Comparator;
 import java.util.List;
 
 public class RankingList implements Serializable {
-
 	private static final long serialVersionUID = 2L;
 
 	public static final String FILENAME = "ranking.dat";
 
 	private ArrayList<RankingScore> rank = new ArrayList<>();
-
-	public RankingList() {
-
-	}
 
 	public List<RankingScore> getList(int length) {
 		length = Math.min(length, this.rank.size());
