@@ -70,15 +70,7 @@ public class GameStaged extends Game {
 	}
 
 	public void makeStage(int stage) {
-		int[][] stageInfo = { { (int) (blockCount(BoardWidth, BoardHeight / 5) * 0.20), BoardHeight / 5 },
-				{ (int) (blockCount(BoardWidth, BoardHeight / 5) * 0.30), BoardHeight / 5 },
-				{ (int) (blockCount(BoardWidth, BoardHeight / 4) * 0.40), BoardHeight / 3 },
-				{ (int) (blockCount(BoardWidth, BoardHeight / 3) * 0.50), BoardHeight / 3 },
-				{ (int) (blockCount(BoardWidth, BoardHeight / 2) * 0.50), BoardHeight / 2 } };
-
-		int stageId = (stage - 1) / stageInfo.length;
-
-		generateRandomDummyBlock(stageInfo[stageId][0], stageInfo[stageId][1]);
+		blocks = StageManager.getInstance().getStageBlocks(stage).clone();
 	}
 
 	protected void refreshText() {
@@ -87,20 +79,6 @@ public class GameStaged extends Game {
 		if (isStarted) {
 			statusbar.setText("[level: " + currentStageLevel + "] (" + (int) getCurrentStageClearPercent() + "%)");
 		}
-	}
-
-	private void generateRandomDummyBlock(int maxBlocks, int maxHeight) {
-		Random rand = new Random();
-		int blocks = rand.nextInt(maxBlocks + 1);
-		for (int i = 0; i < blocks; ++i) {
-			int x = rand.nextInt(BoardWidth);
-			int y = rand.nextInt(maxHeight);
-			setShapeAt(x, y, Tetrominoes.DeadShape);
-		}
-	}
-
-	private int blockCount(int width, int height) {
-		return width * height;
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////

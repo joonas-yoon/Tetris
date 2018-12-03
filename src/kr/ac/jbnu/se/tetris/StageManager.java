@@ -118,8 +118,12 @@ public class StageManager extends JFrame {
 		setVisible(false);
 	}
 
-	public Board getStage(int stageID) {
+	private Board getStage(int stageID) {
 		return stages[stageID];
+	}
+	
+	public Tetrominoes[] getStageBlocks(int stageID) {
+		return stages[stageID].blocks;
 	}
 
 	// stage: [0, GameStaged.FINAL_STAGE)
