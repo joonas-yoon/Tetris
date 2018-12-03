@@ -14,25 +14,25 @@ public class StageEditor extends JFrame {
 	final static int VIEWPORT_WIDTH = 420;
 	final static int VIEWPORT_HEIGHT = 800;
 
-	Board stage;
+	Board board;
 
 	public StageEditor() {
 		init();
 	}
 	
 	public void init(){
-		stage = new Board();
+		board = new Board();
 	}
 
 	public void createFrame() {
 		JPanel pn = new JPanel();
 		pn.setLayout(new BorderLayout());
 
-		stage.setBackground(Color.WHITE);
-		stage.setBorder(new LineBorder(Color.DARK_GRAY));
-		pn.add(stage, BorderLayout.CENTER);
+		board.setBackground(Color.WHITE);
+		board.setBorder(new LineBorder(Color.DARK_GRAY));
+		pn.add(board, BorderLayout.CENTER);
 
-		stage.requestFocusInWindow();
+		board.requestFocusInWindow();
 
 		pn.add(new JButton("SAVE"), BorderLayout.PAGE_END);
 
@@ -46,10 +46,6 @@ public class StageEditor extends JFrame {
 	}
 	
 	public void showFrame(boolean show){
-		
-		for(Tetrominoes t : stage.getBlockState()){
-			System.out.println(t);
-		}
 		setVisible(show);
 	}
 	

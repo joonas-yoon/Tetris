@@ -22,7 +22,7 @@ public class Board extends TetrisGridPanel {
 
 		blocks = new Tetrominoes[BoardWidth * BoardHeight];
 		for(int i=0; i<blocks.length; i++){
-			blocks[i] = Tetrominoes.LineShape;
+			blocks[i] = Tetrominoes.NoShape;
 		}
 	}
 
