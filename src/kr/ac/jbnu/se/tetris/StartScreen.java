@@ -25,6 +25,7 @@ public class StartScreen extends JFrame {
 	JPanel panel;
 	JButton classicModeButton;
 	JButton stageModeButton;
+	JButton stageEditButton;
 	JButton settingButton;
 	JButton rankingButton;
 	JLabel title;
@@ -38,6 +39,8 @@ public class StartScreen extends JFrame {
 	Image rankingImg = rankingOrg.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 
 	Tetris game;
+	
+	StageEditor stageEditor = new StageEditor();
 
 	int width = 360;
 	int height = 500;
@@ -81,10 +84,16 @@ public class StartScreen extends JFrame {
 		panel.add(classicModeButton, gbc);
 
 		stageModeButton = new JButton("Stage Mode");
-		gbc.gridx = 3;
+		gbc.gridx = 2;
 		gbc.gridy = 3;
 		stageModeButton.setFocusPainted(false);
 		panel.add(stageModeButton, gbc);
+
+		stageEditButton = new JButton("Stage Editor");
+		gbc.gridx = 3;
+		gbc.gridy = 3;
+		stageEditButton.setFocusPainted(false);
+		panel.add(stageEditButton, gbc);
 
 		gbc.insets = new Insets(50, 0, 30, 0);
 
@@ -120,6 +129,14 @@ public class StartScreen extends JFrame {
 			}
 		});
 
+		stageEditButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				stageEditor.showFrame(true);
+			}
+		});
+
 		settingButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -138,6 +155,7 @@ public class StartScreen extends JFrame {
 		});
 
 		createFrame();
+		stageEditor.createFrame();
 	}
 
 	public void createFrame() {
