@@ -94,7 +94,7 @@ public class GameStaged extends Game {
 		int numFullLines = super.removeFullLines();
 
 		if (numFullLines > 0) {
-			currentStagePoint += numFullLines * comboCount;
+			currentStagePoint += numFullLines * comboManager.count;
 
 			if (getCurrentStageClearPercent() >= 100.0) {
 				gameClear();

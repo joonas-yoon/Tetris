@@ -25,6 +25,8 @@ public class Game extends Board implements ActionListener {
 	boolean isGameOvered;
 	boolean isGameCleared;
 
+	GameComboManager comboManager;
+
 	int numLinesRemoved;
 	int curX;
 	int curY;
@@ -35,10 +37,6 @@ public class Game extends Board implements ActionListener {
 
 	SoundPlayer sound = new SoundPlayer();
 	BGM bgm = BGM.getInstance();
-
-	Color comboFontColor = Color.BLACK;
-	int comboOpacity = 100;
-	int comboCount;
 
 	int gameSpeedLevel = 1;
 	int[] gameSpeedDelay = { 400, 300, 200, 150, 100, 75, 50 };
@@ -56,19 +54,12 @@ public class Game extends Board implements ActionListener {
 		holdPiece = new Shape();
 		gameTimer = new Timer(getGameSpeed(), this);
 
+		comboManager = new GameComboManager(this);
+
 		statusbar = parent.getStatusBar();
 		scoreText = parent.getScoreText();
 		addKeyListener(new TAdapter());
 		clearBoard();
-
-		long observeDelay = 100;
-		long observePeriod = 100;
-		new java.util.Timer().schedule(new java.util.TimerTask() {
-			@Override
-			public void run() {
-				observe();
-			}
-		}, observeDelay, observePeriod);
 
 		// scheduled long term
 		new java.util.Timer().schedule(new java.util.TimerTask() {
@@ -81,13 +72,6 @@ public class Game extends Board implements ActionListener {
 		this.parent = parent;
 
 		ready();
-	}
-
-	private void observe() {
-		if (comboOpacity - 5 >= 0) {
-			comboOpacity -= 5;
-			repaint();
-		}
 	}
 
 	protected void updateConfigurations() {
@@ -134,21 +118,6 @@ public class Game extends Board implements ActionListener {
 			statusbar.setText("(level: " + gameSpeedLevel + ") score: " + score);
 		}
 		scoreText.setText("SCORE: " + score);
-	}
-
-	protected void showComboMessage(Graphics g, String text) {
-		Color newColor = new Color(comboFontColor.getRed(), comboFontColor.getGreen(), comboFontColor.getBlue(),
-				comboOpacity * 255 / 100);
-		drawCenteredText(g, 0, comboOpacity / 5, text, newColor);
-	}
-
-	protected void processCombo(Graphics g) {
-		if (comboCount > 1) {
-			showComboMessage(g, comboCount + " Combo!");
-		} else {
-			comboOpacity = 100;
-			showComboMessage(g, "");
-		}
 	}
 
 	protected void updateCurrentHoldPiece() {
@@ -247,7 +216,7 @@ public class Game extends Board implements ActionListener {
 		}
 
 		preview(g);
-		processCombo(g);
+		comboManager.showComboMessage(g);
 	}
 
 	protected void drawTitleText(Graphics g) {
@@ -406,16 +375,13 @@ public class Game extends Board implements ActionListener {
 			numLinesRemoved += numFullLines;
 			isFallingFinished = true;
 			curPiece.setShape(Tetrominoes.NoShape);
-			comboCount += 1;
-			comboOpacity = 100;
-			score += numFullLines * 100 * comboCount;
 			setGameSpeed((int) (score / 10000));
 			repaint();
 			refreshText();
 			sound.play("sounds/beep1.wav", 1);
-		} else {
-			comboCount = 0;
 		}
+		comboManager.updateCombo(numFullLines);
+		score = comboManager.calculateScore(score, numFullLines);
 		return numFullLines;
 	}
 
