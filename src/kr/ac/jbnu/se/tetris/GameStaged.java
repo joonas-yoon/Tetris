@@ -6,12 +6,12 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.Random;
 
-public class BoardStages extends Board {
+public class GameStaged extends Game {
 	static final int FINAL_STAGE = 25;
 	int currentStageLevel;
 	int currentStagePoint;
 
-	public BoardStages(Tetris parent) {
+	public GameStaged(Tetris parent) {
 		super(parent);
 	}
 
@@ -95,7 +95,7 @@ public class BoardStages extends Board {
 		for (int i = 0; i < blocks; ++i) {
 			int x = rand.nextInt(BoardWidth);
 			int y = rand.nextInt(maxHeight);
-			board[(y * BoardWidth) + x] = Tetrominoes.DeadShape;
+			setShapeAt(x, y, Tetrominoes.DeadShape);
 		}
 	}
 

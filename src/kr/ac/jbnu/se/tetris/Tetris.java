@@ -29,7 +29,7 @@ public class Tetris extends JFrame {
 	BlockPreviewer holdBlockPreview;
 
 	StartScreen parent;
-	Board board;
+	Game game;
 
 	public Tetris(StartScreen parent) {
 		this.parent = parent;
@@ -45,13 +45,13 @@ public class Tetris extends JFrame {
 		scoreText.setOpaque(true);
 
 		if (isStageMode) {
-			board = new BoardStages(this);
+			game = new GameStaged(this);
 		} else {
-			board = new Board(this);
+			game = new Game(this);
 		}
-		board.setBackground(Color.WHITE);
-		board.setBorder(new LineBorder(Color.DARK_GRAY));
-		board.ready();
+		game.setBackground(Color.WHITE);
+		game.setBorder(new LineBorder(Color.DARK_GRAY));
+		game.ready();
 
 		JPanel blockPreviewsPanel = new JPanel();
 		blockPreviewsPanel.setBorder(new LineBorder(Color.BLACK));
@@ -65,10 +65,10 @@ public class Tetris extends JFrame {
 		holdBlockPreview.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
 		blockPanels.add(holdBlockPreview);
 
-		int nextBlockCount = board.nextBlocks.getSize();
+		int nextBlockCount = game.nextBlocks.getSize();
 		nextBlocksPreview = new BlockPreviewer[nextBlockCount];
 		for (int i = 0; i < nextBlockCount; ++i) {
-			nextBlocksPreview[i] = new BlockPreviewer(board.nextBlocks.getBlock(i));
+			nextBlocksPreview[i] = new BlockPreviewer(game.nextBlocks.getBlock(i));
 			Color borderColor = i == 0 ? Color.RED : Color.LIGHT_GRAY;
 			nextBlocksPreview[i].setBorder(BorderFactory.createLineBorder(borderColor, 5));
 			blockPanels.add(nextBlocksPreview[i]);
@@ -92,12 +92,12 @@ public class Tetris extends JFrame {
 		scoreAndSettings.add(new JLabel());
 		scoreAndSettings.setOpaque(false);
 
-		pn.add(board, BorderLayout.CENTER);
+		pn.add(game, BorderLayout.CENTER);
 		pn.add(blockPreviewsPanel, BorderLayout.LINE_START);
 		pn.add(scoreAndSettings, BorderLayout.PAGE_START);
 		pn.add(statusbar, BorderLayout.PAGE_END);
 
-		board.requestFocusInWindow();
+		game.requestFocusInWindow();
 
 		pn.setBackground(Color.black);
 
@@ -113,8 +113,8 @@ public class Tetris extends JFrame {
 	@Override
 	public void dispose() {
 		parent.createFrame();
-		if (board != null) {
-			board.quit();
+		if (game != null) {
+			game.quit();
 		}
 		super.dispose();
 	}
