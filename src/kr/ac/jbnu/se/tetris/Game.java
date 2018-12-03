@@ -83,12 +83,6 @@ public class Game extends Board implements ActionListener {
 		ready();
 	}
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	// General
-	//
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	private void observe() {
 		if (comboOpacity - 5 >= 0) {
 			comboOpacity -= 5;
@@ -133,12 +127,6 @@ public class Game extends Board implements ActionListener {
 		gameTimer.stop();
 	}
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	// UI/View
-	//
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	protected void refreshText() {
 		if (isPaused) {
 			statusbar.setText("paused");
@@ -148,12 +136,6 @@ public class Game extends Board implements ActionListener {
 		scoreText.setText("SCORE: " + score);
 	}
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	// Combo System
-	//
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	protected void showComboMessage(Graphics g, String text) {
 		Color newColor = new Color(comboFontColor.getRed(), comboFontColor.getGreen(), comboFontColor.getBlue(),
 				comboOpacity * 255 / 100);
@@ -161,7 +143,6 @@ public class Game extends Board implements ActionListener {
 	}
 
 	protected void processCombo(Graphics g) {
-		// 0 for Test, 1 for production
 		if (comboCount > 1) {
 			showComboMessage(g, comboCount + " Combo!");
 		} else {
@@ -169,12 +150,6 @@ public class Game extends Board implements ActionListener {
 			showComboMessage(g, "");
 		}
 	}
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	// Hold
-	//
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	protected void updateCurrentHoldPiece() {
 		if (parent.holdBlockPreview != null) {
@@ -193,12 +168,6 @@ public class Game extends Board implements ActionListener {
 		}
 		updateCurrentHoldPiece();
 	}
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	// Game Life-cycle
-	//
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	protected void ready() {
 		init();
@@ -232,11 +201,7 @@ public class Game extends Board implements ActionListener {
 			return;
 		}
 
-		if (toggle) {
-			isPaused = !isPaused;
-		} else {
-			isPaused = true;
-		}
+		isPaused = !toggle || !isPaused;
 
 		if (isPaused) {
 			bgm.pause();
@@ -258,7 +223,6 @@ public class Game extends Board implements ActionListener {
 		refreshText();
 		bgm.stop();
 		sound.play("sounds/gameover.wav", 0);
-
 		registRank();
 	}
 
@@ -269,21 +233,9 @@ public class Game extends Board implements ActionListener {
 		bgm.stop();
 	}
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	// Ranking
-	//
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	protected void registRank() {
 		Ranking.getInstance().requestSubmitScore(score);
 	}
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	// Paint
-	//
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public void paint(Graphics g) {
 		super.paint(g);
@@ -295,7 +247,6 @@ public class Game extends Board implements ActionListener {
 		}
 
 		preview(g);
-
 		processCombo(g);
 	}
 
@@ -368,12 +319,6 @@ public class Game extends Board implements ActionListener {
 		drawShape(g, curX, bottomPredict, curPiece, true);
 	}
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	// Play
-	//
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	private void dropDown() {
 		int newY = curY;
 		while (newY > 0) {
@@ -395,13 +340,10 @@ public class Game extends Board implements ActionListener {
 		for (int i = 0; i < 4; ++i) {
 			int x = curX + curPiece.x(i);
 			int y = curY - curPiece.y(i);
-			blocks[(y * BoardWidth) + x] = curPiece.getShape();
+			blocks[y * BoardWidth + x] = curPiece.getShape();
 		}
-
 		removeFullLines();
-
 		sound.play("sounds/beep0.wav", 1);
-
 		if (!isFallingFinished) {
 			newPiece();
 		}
@@ -419,12 +361,9 @@ public class Game extends Board implements ActionListener {
 	private void newPiece() {
 		curPiece = nextBlocks.getNextBlock();
 		nextBlocks.pop();
-
 		parent.updateNextBlocks(nextBlocks);
-
 		curX = BoardWidth / 2 + 1;
 		curY = BoardHeight - 1 + curPiece.minY();
-
 		if (!tryMoveOrFail(curPiece, curX, curY)) {
 			gameover();
 		}
@@ -463,40 +402,27 @@ public class Game extends Board implements ActionListener {
 
 	protected int removeFullLines() {
 		int numFullLines = super.removeFullLines();
-
 		if (numFullLines > 0) {
 			numLinesRemoved += numFullLines;
 			isFallingFinished = true;
 			curPiece.setShape(Tetrominoes.NoShape);
-
 			comboCount += 1;
 			comboOpacity = 100;
-
 			score += numFullLines * 100 * comboCount;
-
 			setGameSpeed((int) (score / 10000));
-
 			repaint();
 			refreshText();
 			sound.play("sounds/beep1.wav", 1);
 		} else {
 			comboCount = 0;
 		}
-
 		return numFullLines;
 	}
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	// Key Event
-	//
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	protected void gameKeyPressed(KeyEvent e) {
-		int keycode = e.getKeyCode();
-
 		ConfigurationProperties configKey = Configurations.getInstance().getProperties();
 
+		int keycode = e.getKeyCode();
 		if (keycode == configKey.keyPaused.getCode()) {
 			pause(true);
 			return;
@@ -559,12 +485,6 @@ public class Game extends Board implements ActionListener {
 			gameKeyPressed(e);
 		}
 	}
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	// Configurations
-	//
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void openSettingWindow() {
 		pause(false);

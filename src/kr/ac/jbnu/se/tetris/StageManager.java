@@ -12,11 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 public class StageManager extends JFrame {
-	
 	private static transient StageManager instance = new StageManager();
 
-	final static int VIEWPORT_WIDTH = 420;
-	final static int VIEWPORT_HEIGHT = 800;
+	static final int VIEWPORT_WIDTH = 420;
+	static final int VIEWPORT_HEIGHT = 800;
 
 	int boardWidth, boardHeight;
 
@@ -45,7 +44,7 @@ public class StageManager extends JFrame {
 		currentBoard = stages[0];
 		currentBoard.blocks = stages[0].blocks;
 	}
-	
+
 	public static StageManager getInstance() {
 		return instance;
 	}
@@ -66,8 +65,9 @@ public class StageManager extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				selectedStageId += 1;
-				if (selectedStageId > GameStaged.FINAL_STAGE - 1)
+				if (selectedStageId > GameStaged.FINAL_STAGE - 1) {
 					selectedStageId = GameStaged.FINAL_STAGE - 1;
+				}
 				currentBoard.blocks = getStage(selectedStageId).blocks;
 				currentBoard.repaint();
 			}
@@ -79,8 +79,9 @@ public class StageManager extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				selectedStageId -= 1;
-				if (selectedStageId < 0)
+				if (selectedStageId < 0) {
 					selectedStageId = 0;
+				}
 				currentBoard.blocks = getStage(selectedStageId).blocks;
 				currentBoard.repaint();
 			}
@@ -90,18 +91,14 @@ public class StageManager extends JFrame {
 	public void createFrame() {
 		JPanel pn = new JPanel();
 		pn.setLayout(new BorderLayout());
-
 		pn.add(currentBoard, BorderLayout.CENTER);
-
 		JPanel buttons = new JPanel();
 		buttons.add(prevButton);
 		buttons.add(clearButton);
 		buttons.add(nextButton);
 		pn.add(buttons, BorderLayout.PAGE_END);
-
 		pn.requestFocusInWindow();
 		setContentPane(pn);
-
 		setTitle("Stage Editor");
 		setVisible(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -121,17 +118,17 @@ public class StageManager extends JFrame {
 	private Board getStage(int stageID) {
 		return stages[stageID];
 	}
-	
+
 	public Tetrominoes[] getStageBlocks(int stageID) {
 		return stages[stageID].blocks;
 	}
 
-	// stage: [0, GameStaged.FINAL_STAGE)
+	/** Stage: [0, GameStaged.FINAL_STAGE) */
 	public Board generateRandomStage(int stage) {
 		int totalBlocks = boardWidth * boardHeight;
 		int[] density = { 20, 30, 40, 60, 80 };
 		int blocks = (int) (totalBlocks * (density[stage / density.length] / 100.0));
-		int height = boardHeight * ((stage % density.length) + 1) / density.length;
+		int height = boardHeight * (stage % density.length + 1) / density.length;
 		height = Math.max(5, height);
 		return generateRandomBlocks(blocks, height);
 	}
@@ -145,13 +142,6 @@ public class StageManager extends JFrame {
 			int y = rand.nextInt(maxHeight);
 			temp.setShapeAt(x, y, Tetrominoes.DeadShape);
 		}
-
-		for (int y = 0; y < maxHeight; y++) {
-			for (int x = 0; x < boardWidth; x++)
-				System.out.print(temp.getShapeAt(x, y) + " ");
-			System.out.println("");
-		}
-		System.out.println("------------------------------");
 		return temp;
 	}
 }

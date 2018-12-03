@@ -7,7 +7,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Board extends TetrisGridPanel {
-
 	Tetrominoes[] blocks;
 
 	public Board() {
@@ -79,11 +78,11 @@ public class Board extends TetrisGridPanel {
 	}
 
 	Tetrominoes getShapeAt(int x, int y) {
-		return blocks[(y * BoardWidth) + x];
+		return blocks[y * BoardWidth + x];
 	}
 
 	void setShapeAt(int x, int y, Tetrominoes newShape) {
-		blocks[(y * BoardWidth) + x] = newShape;
+		blocks[y * BoardWidth + x] = newShape;
 	}
 
 	public void paint(Graphics g) {

@@ -10,7 +10,6 @@ public class TetrisGridPanel extends JPanel {
 	public static Color BLOCK_COLORS[] = { new Color(0, 0, 0), new Color(204, 102, 102), new Color(102, 204, 102),
 			new Color(102, 102, 204), new Color(204, 204, 102), new Color(204, 102, 204), new Color(102, 204, 204),
 			new Color(218, 170, 0), new Color(128, 128, 128) };
-	
 	public static final int DEFAULT_WIDTH = 12;
 	public static final int DEFAULT_HEIGHT = 25;
 

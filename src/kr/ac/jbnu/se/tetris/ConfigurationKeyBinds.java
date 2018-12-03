@@ -87,14 +87,14 @@ public class ConfigurationKeyBinds extends JFrame {
 
 	private JButton[] buttons = new JButton[ConfigurationProperties.KEY_BINDING_COUNT];
 
+	final String[] titles = { "Move Left", "Move Right", "Move Down", "Rotate Left", "Rotate Right", "Paused", "Drop",
+			"Hold" };
+
 	public ConfigurationKeyBinds() {
 		setTitle("Config - Key Bindings");
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(buttons.length, 2));
-
-		String[] titles = { "Move Left", "Move Right", "Move Down", "Rotate Left", "Rotate Right", "Paused", "Drop",
-				"Hold" };
 
 		for (int i = 0; i < buttons.length; i++) {
 			buttons[i] = new JButton();
