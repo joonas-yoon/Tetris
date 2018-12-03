@@ -11,11 +11,22 @@ public class Board extends TetrisGridPanel {
 	Tetrominoes[] blocks;
 
 	public Board() {
-		setSize(BoardWidth, BoardHeight);
+		blocks = new Tetrominoes[BoardWidth * BoardHeight];
+		for (int i = 0; i < BoardWidth * BoardHeight; ++i) {
+			blocks[i] = Tetrominoes.NoShape;
+		}
 	}
 
 	public Board(int width, int height) {
+		blocks = new Tetrominoes[width * height];
+		for (int i = 0; i < width * height; ++i) {
+			blocks[i] = Tetrominoes.NoShape;
+		}
 		setSize(width, height);
+	}
+
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	class Editable extends MouseAdapter {
@@ -24,7 +35,7 @@ public class Board extends TetrisGridPanel {
 		}
 
 		int getY(MouseEvent e) {
-			return BoardHeight - (e.getY() + squareHeight() / 2) / squareHeight();
+			return BoardHeight - (e.getY() + squareHeight()) / squareHeight();
 		}
 
 		@Override
@@ -42,27 +53,18 @@ public class Board extends TetrisGridPanel {
 			removeMouseListener(mouseEvent);
 		}
 	}
-	
-	public void readonly(boolean flag){
+
+	public void readonly(boolean flag) {
 		editMode(!flag);
 	}
 
-	public void toggleShapeAt(int x, int y, Tetrominoes shape) {
+	private void toggleShapeAt(int x, int y, Tetrominoes shape) {
 		if (getShapeAt(x, y) == Tetrominoes.NoShape) {
 			setShapeAt(x, y, shape);
 		} else {
 			setShapeAt(x, y, Tetrominoes.NoShape);
 		}
 		repaint();
-	}
-
-	public void setSize(int width, int height) {
-		super.setSize(width, height);
-
-		blocks = new Tetrominoes[BoardWidth * BoardHeight];
-		for (int i = 0; i < blocks.length; i++) {
-			blocks[i] = Tetrominoes.NoShape;
-		}
 	}
 
 	public Tetrominoes[] getBlockState() {
@@ -73,6 +75,7 @@ public class Board extends TetrisGridPanel {
 		for (int i = 0; i < BoardHeight * BoardWidth; ++i) {
 			blocks[i] = Tetrominoes.NoShape;
 		}
+		repaint();
 	}
 
 	Tetrominoes getShapeAt(int x, int y) {

@@ -39,8 +39,8 @@ public class StartScreen extends JFrame {
 	Image rankingImg = rankingOrg.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 
 	Tetris game;
-	
-	StageEditor stageEditor = new StageEditor();
+
+	StageManager stageEditor = StageManager.getInstance();
 
 	int width = 360;
 	int height = 500;
