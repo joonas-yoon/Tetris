@@ -3,25 +3,64 @@ package kr.ac.jbnu.se.tetris;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Board extends TetrisGridPanel {
 
 	Tetrominoes[] blocks;
 
-	public Board(){
+	public Board() {
 		setSize(BoardWidth, BoardHeight);
-		System.out.println(this);
 	}
 
 	public Board(int width, int height) {
 		setSize(width, height);
 	}
 
+	class Editable extends MouseAdapter {
+		int getX(MouseEvent e) {
+			return e.getX() / squareWidth();
+		}
+
+		int getY(MouseEvent e) {
+			return BoardHeight - (e.getY() + squareHeight() / 2) / squareHeight();
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			toggleShapeAt(getX(e), getY(e), Tetrominoes.DeadShape);
+		}
+	}
+
+	Editable mouseEvent = new Editable();
+
+	public void editMode(boolean active) {
+		if (active) {
+			addMouseListener(mouseEvent);
+		} else {
+			removeMouseListener(mouseEvent);
+		}
+	}
+	
+	public void readonly(boolean flag){
+		editMode(!flag);
+	}
+
+	public void toggleShapeAt(int x, int y, Tetrominoes shape) {
+		if (getShapeAt(x, y) == Tetrominoes.NoShape) {
+			setShapeAt(x, y, shape);
+		} else {
+			setShapeAt(x, y, Tetrominoes.NoShape);
+		}
+		repaint();
+	}
+
 	public void setSize(int width, int height) {
 		super.setSize(width, height);
 
 		blocks = new Tetrominoes[BoardWidth * BoardHeight];
-		for(int i=0; i<blocks.length; i++){
+		for (int i = 0; i < blocks.length; i++) {
 			blocks[i] = Tetrominoes.NoShape;
 		}
 	}
@@ -39,8 +78,8 @@ public class Board extends TetrisGridPanel {
 	Tetrominoes getShapeAt(int x, int y) {
 		return blocks[(y * BoardWidth) + x];
 	}
-	
-	void setShapeAt(int x, int y, Tetrominoes newShape){
+
+	void setShapeAt(int x, int y, Tetrominoes newShape) {
 		blocks[(y * BoardWidth) + x] = newShape;
 	}
 
@@ -86,7 +125,7 @@ public class Board extends TetrisGridPanel {
 				}
 			}
 		}
-		
+
 		return numFullLines;
 	}
 }

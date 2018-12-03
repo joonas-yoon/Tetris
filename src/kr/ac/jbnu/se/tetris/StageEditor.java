@@ -2,8 +2,6 @@ package kr.ac.jbnu.se.tetris;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,9 +17,10 @@ public class StageEditor extends JFrame {
 	public StageEditor() {
 		init();
 	}
-	
-	public void init(){
+
+	public void init() {
 		board = new Board();
+		board.readonly(false);
 	}
 
 	public void createFrame() {
@@ -44,13 +43,13 @@ public class StageEditor extends JFrame {
 		setSize(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 		setLocationRelativeTo(null);
 	}
-	
-	public void showFrame(boolean show){
+
+	public void showFrame(boolean show) {
 		setVisible(show);
 	}
-	
+
 	@Override
-	public void dispose(){
+	public void dispose() {
 		setVisible(false);
 	}
 }
